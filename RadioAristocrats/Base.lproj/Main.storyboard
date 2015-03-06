@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7513.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="RadioAristocrats" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -20,6 +21,84 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="307" y="396"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="ZwP-eD-M2h">
+            <objects>
+                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="TyF-dr-ULB" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h90-wR-Yhf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1143" y="40"/>
+        </scene>
+        <!--Page Content View Controller-->
+        <scene sceneID="sRa-Ea-Chd">
+            <objects>
+                <viewController storyboardIdentifier="PageContentViewController" id="gxK-tD-wH4" customClass="PageContentViewController" customModule="RadioAristocrats" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HwD-lL-yqr"/>
+                        <viewControllerLayoutGuide type="bottom" id="nQi-Ss-4Bj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ey8-ec-BH2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_ua" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-5B-TaV">
+                                <rect key="frame" x="175" y="90" width="250" height="47"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zqj-5s-SPg">
+                                <rect key="frame" x="230" y="230" width="140" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="o68-pT-YaE"/>
+                                    <constraint firstAttribute="height" constant="140" id="v56-RP-4U0"/>
+                                </constraints>
+                                <state key="normal" image="play">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playButtonTouched:" destination="gxK-tD-wH4" eventType="touchUpInside" id="LcD-mx-72J"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aqw-Jb-Eey">
+                                <rect key="frame" x="16" y="475" width="568" height="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2h-TM-av0">
+                                <rect key="frame" x="16" y="503" width="568" height="17"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o2h-TM-av0" firstAttribute="trailing" secondItem="Ey8-ec-BH2" secondAttribute="trailingMargin" id="31N-EW-iUz"/>
+                            <constraint firstAttribute="centerY" secondItem="zqj-5s-SPg" secondAttribute="centerY" id="CAb-ci-LiB"/>
+                            <constraint firstItem="o2h-TM-av0" firstAttribute="leading" secondItem="Ey8-ec-BH2" secondAttribute="leadingMargin" id="IoC-uU-hgd"/>
+                            <constraint firstItem="Aqw-Jb-Eey" firstAttribute="trailing" secondItem="Ey8-ec-BH2" secondAttribute="trailingMargin" id="Vw7-PA-AP5"/>
+                            <constraint firstItem="Aqw-Jb-Eey" firstAttribute="leading" secondItem="Ey8-ec-BH2" secondAttribute="leadingMargin" id="X5b-oc-vrz"/>
+                            <constraint firstItem="zQo-5B-TaV" firstAttribute="top" secondItem="HwD-lL-yqr" secondAttribute="bottom" constant="70" id="e5r-S8-3ut"/>
+                            <constraint firstAttribute="centerX" secondItem="zQo-5B-TaV" secondAttribute="centerX" id="eMd-Mm-SsT"/>
+                            <constraint firstItem="nQi-Ss-4Bj" firstAttribute="top" secondItem="o2h-TM-av0" secondAttribute="bottom" constant="80" id="iwL-Vq-sbc"/>
+                            <constraint firstAttribute="centerX" secondItem="zqj-5s-SPg" secondAttribute="centerX" id="tNo-sQ-NCq"/>
+                            <constraint firstItem="o2h-TM-av0" firstAttribute="top" secondItem="Aqw-Jb-Eey" secondAttribute="bottom" constant="8" id="wAD-Ng-Xg4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="artistNameLabel" destination="o2h-TM-av0" id="GUc-ZC-GtR"/>
+                        <outlet property="playButton" destination="zqj-5s-SPg" id="VAm-dn-OMO"/>
+                        <outlet property="trackTitleLabel" destination="Aqw-Jb-Eey" id="xTB-uA-gmc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fRg-7N-24a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1143" y="833"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="logo_ua" width="250" height="47"/>
+        <image name="play" width="150" height="150"/>
+    </resources>
 </document>

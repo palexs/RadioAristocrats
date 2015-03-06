@@ -13,6 +13,10 @@
 		FD74E2E41AA87A3400EFF16B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E31AA87A3400EFF16B /* Images.xcassets */; };
 		FD74E2E71AA87A3400EFF16B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E51AA87A3400EFF16B /* LaunchScreen.xib */; };
 		FD74E2F31AA87A3400EFF16B /* RadioAristocratsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2F21AA87A3400EFF16B /* RadioAristocratsTests.swift */; };
+		FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */; };
+		FD74E3011AA896DB00EFF16B /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3001AA896DB00EFF16B /* Track.swift */; };
+		FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3021AA898E800EFF16B /* RadioManager.swift */; };
+		FD74E3051AA9A5DF00EFF16B /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		FD74E2EC1AA87A3400EFF16B /* RadioAristocratsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadioAristocratsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD74E2F11AA87A3400EFF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD74E2F21AA87A3400EFF16B /* RadioAristocratsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioAristocratsTests.swift; sourceTree = "<group>"; };
+		FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageContentViewController.swift; sourceTree = "<group>"; };
+		FD74E3001AA896DB00EFF16B /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		FD74E3021AA898E800EFF16B /* RadioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioManager.swift; sourceTree = "<group>"; };
+		FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +87,10 @@
 			children = (
 				FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */,
 				FD74E2DE1AA87A3400EFF16B /* ViewController.swift */,
+				FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */,
+				FD74E3001AA896DB00EFF16B /* Track.swift */,
+				FD74E3021AA898E800EFF16B /* RadioManager.swift */,
+				FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */,
 				FD74E2E01AA87A3400EFF16B /* Main.storyboard */,
 				FD74E2E31AA87A3400EFF16B /* Images.xcassets */,
 				FD74E2E51AA87A3400EFF16B /* LaunchScreen.xib */,
@@ -212,8 +224,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */,
 				FD74E2DF1AA87A3400EFF16B /* ViewController.swift in Sources */,
 				FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */,
+				FD74E3011AA896DB00EFF16B /* Track.swift in Sources */,
+				FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */,
+				FD74E3051AA9A5DF00EFF16B /* HtmlParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
