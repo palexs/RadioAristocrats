@@ -18,7 +18,21 @@ class HtmlParser {
     }
     
     class func parse(html: String) -> Track? {
-        let track = Track(title: "AAAAAA", artist: "BBBBB")
+        // Get Title
+        let rangeTitleOpen = html.rangeOfString(HtmlTag.TitleOpen, options: NSStringCompareOptions.LiteralSearch, range: nil, locale: nil)
+        let rangeTitleClose = html.rangeOfString(HtmlTag.TitleClose, options: NSStringCompareOptions.LiteralSearch, range: nil, locale: nil)
+
+        let titleRange: Range<String.Index> = Range<String.Index>(start: rangeTitleOpen!.endIndex, end:rangeTitleClose!.startIndex)
+        let title = html.substringWithRange(titleRange)
+        
+        // Get Artist
+        let rangeArtistOpen = html.rangeOfString(HtmlTag.ArtistOpen, options: NSStringCompareOptions.LiteralSearch, range: nil, locale: nil)
+        let rangeArtistClose = html.rangeOfString(HtmlTag.ArtistClose, options: NSStringCompareOptions.LiteralSearch, range: nil, locale: nil)
+        
+        let artistRange: Range<String.Index> = Range<String.Index>(start: rangeArtistOpen!.endIndex, end:rangeArtistClose!.startIndex)
+        let artist = html.substringWithRange(artistRange)
+        
+        let track = Track(title:title, artist:artist)
         return track
     }
     
