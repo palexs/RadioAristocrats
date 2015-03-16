@@ -12,8 +12,6 @@ class RadioManager {
     
     private struct Endpoint {
         static let TrackUrl = "http://m.aristocrats.fm/cs.html"
-        static let MusicBestQualityUrl = "http://144.76.79.38:8000/live2"
-        static let MusicGPRSUrl = "http://144.76.79.38:8000/live2-64"
     }
    
     class var sharedInstance: RadioManager {

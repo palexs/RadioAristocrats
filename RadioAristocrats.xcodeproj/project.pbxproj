@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD1BABAE1AB3312C00FAA022 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */; };
 		FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */; };
 		FD74E2DF1AA87A3400EFF16B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2DE1AA87A3400EFF16B /* ViewController.swift */; };
 		FD74E2E21AA87A3400EFF16B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E01AA87A3400EFF16B /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FD74E2D71AA87A3400EFF16B /* RadioAristocrats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RadioAristocrats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD74E2DB1AA87A3400EFF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD1BABAE1AB3312C00FAA022 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +105,7 @@
 		FD74E2DA1AA87A3400EFF16B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */,
 				FD74E2DB1AA87A3400EFF16B /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -425,6 +429,7 @@
 				FD74E2F81AA87A3400EFF16B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FD74E2F91AA87A3400EFF16B /* Build configuration list for PBXNativeTarget "RadioAristocratsTests" */ = {
 			isa = XCConfigurationList;
@@ -433,6 +438,7 @@
 				FD74E2FB1AA87A3400EFF16B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
