@@ -60,17 +60,45 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aqw-Jb-Eey">
-                                <rect key="frame" x="16" y="475" width="568" height="20"/>
+                                <rect key="frame" x="16" y="435" width="568" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2h-TM-av0">
-                                <rect key="frame" x="16" y="503" width="568" height="17"/>
+                                <rect key="frame" x="16" y="463" width="568" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T9j-wd-UTm" userLabel="ContainerView">
+                                <rect key="frame" x="180" y="512" width="241" height="53"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PCA-yn-K6M">
+                                        <rect key="frame" x="96" y="5" width="125" height="29"/>
+                                        <segments>
+                                            <segment title="Лучшее"/>
+                                            <segment title="GPRS"/>
+                                        </segments>
+                                    </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Качество:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aQG-Ic-JKd">
+                                        <rect key="frame" x="8" y="8" width="80" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="aQG-Ic-JKd" firstAttribute="top" secondItem="T9j-wd-UTm" secondAttribute="top" constant="8" id="B5s-Cs-e35"/>
+                                    <constraint firstAttribute="width" constant="241" id="cek-Ds-Fgp"/>
+                                    <constraint firstAttribute="height" constant="53" id="hyt-IE-0Pu"/>
+                                    <constraint firstAttribute="trailing" secondItem="PCA-yn-K6M" secondAttribute="trailing" constant="20" id="hzx-JW-fdS"/>
+                                    <constraint firstItem="PCA-yn-K6M" firstAttribute="leading" secondItem="aQG-Ic-JKd" secondAttribute="trailing" constant="8" id="iBP-dg-Wy7"/>
+                                    <constraint firstAttribute="bottom" secondItem="PCA-yn-K6M" secondAttribute="bottom" constant="20" id="sVA-Z4-Vdk"/>
+                                    <constraint firstItem="aQG-Ic-JKd" firstAttribute="leading" secondItem="T9j-wd-UTm" secondAttribute="leading" constant="8" id="z3Q-fk-fyY"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -81,13 +109,16 @@
                             <constraint firstItem="Aqw-Jb-Eey" firstAttribute="leading" secondItem="Ey8-ec-BH2" secondAttribute="leadingMargin" id="X5b-oc-vrz"/>
                             <constraint firstItem="zQo-5B-TaV" firstAttribute="top" secondItem="HwD-lL-yqr" secondAttribute="bottom" constant="70" id="e5r-S8-3ut"/>
                             <constraint firstAttribute="centerX" secondItem="zQo-5B-TaV" secondAttribute="centerX" id="eMd-Mm-SsT"/>
-                            <constraint firstItem="nQi-Ss-4Bj" firstAttribute="top" secondItem="o2h-TM-av0" secondAttribute="bottom" constant="80" id="iwL-Vq-sbc"/>
+                            <constraint firstAttribute="centerX" secondItem="T9j-wd-UTm" secondAttribute="centerX" id="rtz-aG-iai"/>
+                            <constraint firstItem="nQi-Ss-4Bj" firstAttribute="top" secondItem="T9j-wd-UTm" secondAttribute="bottom" constant="35" id="sq9-XI-z0E"/>
                             <constraint firstAttribute="centerX" secondItem="zqj-5s-SPg" secondAttribute="centerX" id="tNo-sQ-NCq"/>
                             <constraint firstItem="o2h-TM-av0" firstAttribute="top" secondItem="Aqw-Jb-Eey" secondAttribute="bottom" constant="8" id="wAD-Ng-Xg4"/>
+                            <constraint firstItem="T9j-wd-UTm" firstAttribute="top" secondItem="o2h-TM-av0" secondAttribute="bottom" constant="32" id="wV1-RR-FYw"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="artistNameLabel" destination="o2h-TM-av0" id="GUc-ZC-GtR"/>
+                        <outlet property="musicQuialitySegmentedControl" destination="PCA-yn-K6M" id="YM1-To-2HW"/>
                         <outlet property="playButton" destination="zqj-5s-SPg" id="VAm-dn-OMO"/>
                         <outlet property="trackTitleLabel" destination="Aqw-Jb-Eey" id="xTB-uA-gmc"/>
                     </connections>

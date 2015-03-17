@@ -24,6 +24,7 @@ class PageContentViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var trackTitleLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
+    @IBOutlet weak var musicQuialitySegmentedControl: UISegmentedControl!
     
     // MARK: - View Controller Lifecycle
     
