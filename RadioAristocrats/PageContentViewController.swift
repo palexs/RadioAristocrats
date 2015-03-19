@@ -16,6 +16,11 @@ class PageContentViewController: UIViewController {
         static let MusicGPRSUrl = "http://144.76.79.38:8000/live2-64"
     }
     
+    private enum MusicQuality: Int {
+        case Best = 0
+        case GPRS = 1
+    }
+    
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
 
@@ -28,15 +33,10 @@ class PageContentViewController: UIViewController {
     
     // MARK: - View Controller Lifecycle
     
-    override func viewDidLoad() {
-        // Initialize player
-        let url = NSURL(string: Endpoint.MusicBestQualityUrl)
-        var playerItem = AVPlayerItem(URL: url!)
-        self.player = AVPlayer(playerItem: playerItem!)
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.getReachabilityStatusAndInitPlayer()
         
         self.player?.currentItem.addObserver(self, forKeyPath: "status", options: .allZeros, context: &KVOContext)
         
@@ -57,15 +57,43 @@ class PageContentViewController: UIViewController {
         self.player?.currentItem.removeObserver(self, forKeyPath: "status", context: &KVOContext)
     }
     
-    // MARK: -
+    // MARK: - IBActions
     
     @IBAction func playButtonTouched(sender: UIButton) {
         println("Play button touched.")
         
         if (self.player?.rate == 0.0) {
             self.player?.play()
+            self.playButton.setImage(UIImage(named: "pause"), forState: .Normal)
         } else {
             self.player?.pause()
+            self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+        }
+    }
+    
+    @IBAction func indexChanged(sender: UISegmentedControl) {
+        
+        if let index = MusicQuality(rawValue : sender.selectedSegmentIndex) {
+            
+            self.player?.pause()
+            self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+            self.player?.currentItem.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+            
+            switch index {
+            case .Best:
+                self.setupPlayer(.Best)
+                println("Best")
+            case .GPRS:
+                self.setupPlayer(.GPRS)
+                println("GPRS")
+            default:
+                break
+            }
+            
+            self.player?.currentItem.addObserver(self, forKeyPath: "status", options: .allZeros, context: &KVOContext)
+
+        } else {
+            println("*** Invalid segmented control index!")
         }
     }
     
@@ -73,17 +101,54 @@ class PageContentViewController: UIViewController {
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if (context == &KVOContext) {
-            var playerItem = object as! AVPlayerItem
-            
-            if (self.player?.rate == 0.0) {
-                self.playButton.setImage(UIImage(named: "pause"), forState: .Normal)
-            } else {
-                self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
-            }
+//            var playerItem = object as! AVPlayerItem
+//            
+//            if (self.player?.rate == 0.0) {
+//                self.playButton.setImage(UIImage(named: "pause"), forState: .Normal)
+//            } else {
+//                self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+//            }
             
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
+    }
+    
+    // MARK: - Private methods
+    
+    private func getReachabilityStatusAndInitPlayer() -> Void {
+        var reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        if reachability.isReachable() {
+            if reachability.isReachableViaWiFi() {
+                musicQuialitySegmentedControl.selectedSegmentIndex = 0
+                self.setupPlayer(.Best)
+                println("Reachable via WiFi")
+            } else {
+                self.setupPlayer(.GPRS)
+                musicQuialitySegmentedControl.selectedSegmentIndex = 1
+                println("Reachable via Cellular")
+            }
+            
+        } else {
+//            var alert = UIAlertController(title: "No Internet Connection", message: "Please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+//            self.presentViewController(alert, animated: true, completion: nil)
+            println("*** Not reachable!")
+        }
+    }
+    
+    private func setupPlayer(quality: MusicQuality) -> Void {
+        var url: NSURL?
+        
+        switch quality {
+            case .Best:
+                url = NSURL(string: Endpoint.MusicBestQualityUrl)
+            case .GPRS:
+                url = NSURL(string: Endpoint.MusicGPRSUrl)
+        }
+        
+        var playerItem = AVPlayerItem(URL: url!)
+        self.player = AVPlayer(playerItem: playerItem!)
     }
     
 }

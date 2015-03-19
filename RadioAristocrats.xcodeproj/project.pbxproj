@@ -18,6 +18,7 @@
 		FD74E3011AA896DB00EFF16B /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3001AA896DB00EFF16B /* Track.swift */; };
 		FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3021AA898E800EFF16B /* RadioManager.swift */; };
 		FD74E3051AA9A5DF00EFF16B /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */; };
+		FDE7DB971ABB16DD004AE1C7 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE7DB961ABB16DD004AE1C7 /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		FD74E3001AA896DB00EFF16B /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		FD74E3021AA898E800EFF16B /* RadioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioManager.swift; sourceTree = "<group>"; };
 		FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlParser.swift; sourceTree = "<group>"; };
+		FDE7DB961ABB16DD004AE1C7 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */,
 				FD74E2DE1AA87A3400EFF16B /* ViewController.swift */,
 				FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */,
+				FDE7DB961ABB16DD004AE1C7 /* Reachability.swift */,
 				FD74E3001AA896DB00EFF16B /* Track.swift */,
 				FD74E3021AA898E800EFF16B /* RadioManager.swift */,
 				FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */,
@@ -228,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDE7DB971ABB16DD004AE1C7 /* Reachability.swift in Sources */,
 				FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */,
 				FD74E2DF1AA87A3400EFF16B /* ViewController.swift in Sources */,
 				FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */,
