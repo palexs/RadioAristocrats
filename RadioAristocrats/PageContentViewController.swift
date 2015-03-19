@@ -36,7 +36,7 @@ class PageContentViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.getReachabilityStatusAndInitPlayer()
+        self.setupInitialUIAndPlayer()
         
         self.player?.currentItem.addObserver(self, forKeyPath: "status", options: .allZeros, context: &KVOContext)
         
@@ -102,12 +102,6 @@ class PageContentViewController: UIViewController {
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if (context == &KVOContext) {
 //            var playerItem = object as! AVPlayerItem
-//            
-//            if (self.player?.rate == 0.0) {
-//                self.playButton.setImage(UIImage(named: "pause"), forState: .Normal)
-//            } else {
-//                self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
-//            }
             
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
@@ -116,23 +110,21 @@ class PageContentViewController: UIViewController {
     
     // MARK: - Private methods
     
-    private func getReachabilityStatusAndInitPlayer() -> Void {
+    private func setupInitialUIAndPlayer() -> Void {
+        self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+        
         var reachability: Reachability = Reachability.reachabilityForInternetConnection()
         if reachability.isReachable() {
             if reachability.isReachableViaWiFi() {
-                musicQuialitySegmentedControl.selectedSegmentIndex = 0
+                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
                 self.setupPlayer(.Best)
                 println("Reachable via WiFi")
             } else {
+                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.GPRS.rawValue
                 self.setupPlayer(.GPRS)
-                musicQuialitySegmentedControl.selectedSegmentIndex = 1
                 println("Reachable via Cellular")
             }
-            
         } else {
-//            var alert = UIAlertController(title: "No Internet Connection", message: "Please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-//            self.presentViewController(alert, animated: true, completion: nil)
             println("*** Not reachable!")
         }
     }
