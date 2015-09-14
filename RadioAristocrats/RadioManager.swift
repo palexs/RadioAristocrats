@@ -46,7 +46,7 @@ class RadioManager {
                 println("*** Error: \(error!.localizedDescription)")
                 callback(nil, error)
             } else {
-                let htmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as String
+                let htmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String
                 let track = HtmlParser.parse(htmlString)
                 callback(track, nil)
             }
