@@ -10,8 +10,16 @@ import Foundation
 
 class RadioManager {
     
+    internal enum ChannelType: Int {
+        case Stream = 0
+        case AMusic = 1
+        case Jazz = 2
+    }
+    
     private struct Endpoint {
-        static let TrackUrl = "http://m.aristocrats.fm/cs.html"
+        static let StreamUrl = "http://aristocrats.fm/service/NowOnAir.xml"
+        static let AMusicUrl = "http://aristocrats.fm/service/nowplaying-amusic.xml"
+        static let JazzUrl = "http://aristocrats.fm/service/nowplaying-ajazz.xml"
     }
    
     class var sharedInstance: RadioManager {
@@ -39,18 +47,30 @@ class RadioManager {
         HTTPsendRequest(request, callback: callback)
     }
     
-    func fetchCurrentTrack(callback: (Track?, NSError?) -> Void) {
-        HTTPGet(Endpoint.TrackUrl) {
+    func fetchTrack(channel: ChannelType, callback: (Track?, NSError?) -> Void) {
+        var url: String?
+        
+        switch channel {
+            case .Stream:
+                url = Endpoint.StreamUrl
+            case .AMusic:
+                url = Endpoint.AMusicUrl
+            case .Jazz:
+                url = Endpoint.JazzUrl
+        }
+        
+        HTTPGet(url!) {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
                 callback(nil, error)
             } else {
-                let htmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String
-                let track = HtmlParser.parse(htmlString)
+                let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String
+                let track = XMLParser.parse(xmlString, channel: channel)
                 callback(track, nil)
             }
         }
+        
     }
     
 }

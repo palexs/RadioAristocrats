@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController, UIPageViewControllerDataSource {
 
     private struct ContentViewControllers {
-        static let Count = 2
+        static let Count = 3 // Stream, A-Music, Jazz
     }
     
     var pageViewController : UIPageViewController!

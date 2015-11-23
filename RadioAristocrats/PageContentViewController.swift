@@ -41,7 +41,8 @@ class PageContentViewController: UIViewController {
         
         self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         
-        RadioManager.sharedInstance.fetchCurrentTrack {
+        let channel = RadioManager.ChannelType(rawValue: self.pageIndex!)
+        RadioManager.sharedInstance.fetchTrack(channel!) {
             (track: Track?, error: NSError?) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if let track = track {
