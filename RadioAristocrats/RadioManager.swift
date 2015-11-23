@@ -35,7 +35,7 @@ class RadioManager {
     }
     
     private func HTTPGet(url: String, callback: (NSData?, NSError?) -> Void) {
-        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         HTTPsendRequest(request, callback: callback)
     }
     
@@ -43,7 +43,7 @@ class RadioManager {
         HTTPGet(Endpoint.TrackUrl) {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
-                println("*** Error: \(error!.localizedDescription)")
+                print("*** Error: \(error!.localizedDescription)")
                 callback(nil, error)
             } else {
                 let htmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String

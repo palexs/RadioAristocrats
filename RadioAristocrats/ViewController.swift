@@ -69,7 +69,7 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
             return nil
         }
         
-        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController")as! PageContentViewController
+        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as! PageContentViewController
         
         pageContentViewController.pageIndex = index
         
