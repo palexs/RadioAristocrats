@@ -24,6 +24,7 @@ class PageContentViewController: UIViewController {
     
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
+    private var channel: RadioManager.ChannelType?
 
     var pageIndex: Int?
 
@@ -38,11 +39,15 @@ class PageContentViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.setupInitialUIAndPlayer()
-        
         self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         
-        let channel = RadioManager.ChannelType(rawValue: self.pageIndex!)
-        RadioManager.sharedInstance.fetchTrack(channel!) {
+        if let channel = RadioManager.ChannelType(rawValue: self.pageIndex!) {
+            self.channel = channel
+        } else {
+            assertionFailure("*** Failed to set channel type!")
+        }
+        
+        RadioManager.sharedInstance.fetchTrack(self.channel!) {
             (track: Track?, error: NSError?) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if let track = track {
@@ -93,7 +98,7 @@ class PageContentViewController: UIViewController {
             self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
 
         } else {
-            print("*** Invalid segmented control index!")
+            assertionFailure("*** Invalid segmented control index!")
         }
     }
     
