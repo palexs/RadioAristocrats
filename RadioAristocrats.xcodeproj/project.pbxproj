@@ -18,7 +18,7 @@
 		FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */; };
 		FD74E3011AA896DB00EFF16B /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3001AA896DB00EFF16B /* Track.swift */; };
 		FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3021AA898E800EFF16B /* RadioManager.swift */; };
-		FD74E3051AA9A5DF00EFF16B /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */; };
+		FD74E3051AA9A5DF00EFF16B /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +49,7 @@
 		FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageContentViewController.swift; sourceTree = "<group>"; };
 		FD74E3001AA896DB00EFF16B /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		FD74E3021AA898E800EFF16B /* RadioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioManager.swift; sourceTree = "<group>"; };
-		FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlParser.swift; sourceTree = "<group>"; };
+		FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,7 +117,7 @@
 				FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */,
 				FD74E3001AA896DB00EFF16B /* Track.swift */,
 				FD74E3021AA898E800EFF16B /* RadioManager.swift */,
-				FD74E3041AA9A5DF00EFF16B /* HtmlParser.swift */,
+				FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */,
 				FD74E2E01AA87A3400EFF16B /* Main.storyboard */,
 				FD74E2E31AA87A3400EFF16B /* Images.xcassets */,
 				FD74E2E51AA87A3400EFF16B /* LaunchScreen.xib */,
@@ -310,7 +310,7 @@
 				FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */,
 				FD74E3011AA896DB00EFF16B /* Track.swift in Sources */,
 				FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */,
-				FD74E3051AA9A5DF00EFF16B /* HtmlParser.swift in Sources */,
+				FD74E3051AA9A5DF00EFF16B /* XMLParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
