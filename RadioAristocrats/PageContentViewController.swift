@@ -15,7 +15,6 @@ class PageContentViewController: UIViewController {
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
     private var channel: RadioManager.ChannelType?
-    private var quality: RadioManager.MusicQuality?
     
     var pageIndex: Int?
 
@@ -31,12 +30,6 @@ class PageContentViewController: UIViewController {
             self.channel = channel
         } else {
             assertionFailure("*** Failed to set channel type!")
-        }
-        
-        if let quality = RadioManager.MusicQuality(rawValue: self.musicQuialitySegmentedControl.selectedSegmentIndex) {
-            self.quality = quality
-        } else {
-            assertionFailure("*** Failed to set music quality!")
         }
     }
     
