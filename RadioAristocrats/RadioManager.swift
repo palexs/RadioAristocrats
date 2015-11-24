@@ -10,18 +10,60 @@ import Foundation
 
 class RadioManager {
     
-    internal enum ChannelType: Int {
+    enum ChannelType: Int {
         case Stream = 0
         case AMusic = 1
         case Jazz = 2
     }
     
-    private struct Endpoint {
-        static let StreamUrl = "http://aristocrats.fm/service/NowOnAir.xml"
-        static let AMusicUrl = "http://aristocrats.fm/service/nowplaying-amusic.xml"
-        static let JazzUrl = "http://aristocrats.fm/service/nowplaying-ajazz.xml"
+    enum MusicQuality: Int {
+        case Best = 0
+        case Edge = 1
     }
-   
+    
+    enum Endpoint {
+        case XML(ChannelType)
+        case Music(ChannelType, MusicQuality)
+        
+        func urlString() -> String {
+            switch self {
+            case .XML(let channel):
+                switch channel {
+                    case .Stream:
+                        return "http://aristocrats.fm/service/NowOnAir.xml"
+                    case .AMusic:
+                        return "http://aristocrats.fm/service/nowplaying-amusic.xml"
+                    case .Jazz:
+                        return "http://aristocrats.fm/service/nowplaying-ajazz.xml"
+                }
+
+            case .Music(let channel, let quality):
+                switch quality {
+                    case .Best:
+                        switch channel {
+                            case .Stream:
+                                return "http://144.76.79.38:8000/live2"
+                            case .AMusic:
+                                return "http://144.76.79.38:8000/amusic-128"
+                            case .Jazz:
+                                return "http://144.76.79.38:8000/ajazz"
+                        }
+                    case .Edge:
+                        switch channel {
+                            case .Stream:
+                                return "http://144.76.79.38:8000/live2-64"
+                            case .AMusic:
+                                return "http://144.76.79.38:8000/amusic-64"
+                            case .Jazz:
+                                return "http://144.76.79.38:8000/ajazz"
+                        }
+                    
+                }
+
+            }
+        }
+    }
+    
     class var sharedInstance: RadioManager {
         struct Static {
             static let instance: RadioManager = RadioManager()
@@ -47,27 +89,18 @@ class RadioManager {
         HTTPsendRequest(request, callback: callback)
     }
     
-    func fetchTrack(channel: ChannelType, callback: (Track?, NSError?) -> Void) {
-        var url: String?
+    func fetchTrack(channel: ChannelType, callback: ((track: Track?, message: String?), NSError?) -> Void) {
+        let urlString = Endpoint.XML(channel).urlString()
         
-        switch channel {
-            case .Stream:
-                url = Endpoint.StreamUrl
-            case .AMusic:
-                url = Endpoint.AMusicUrl
-            case .Jazz:
-                url = Endpoint.JazzUrl
-        }
-        
-        HTTPGet(url!) {
+        HTTPGet(urlString) {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
-                callback(nil, error)
+                callback((nil, nil), error)
             } else {
                 let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String
-                let track = XMLParser.parse(xmlString, channel: channel)
-                callback(track, nil)
+                let (track, message) = XMLParser.parse(xmlString, channel: channel)
+                callback((track, message), nil)
             }
         }
         

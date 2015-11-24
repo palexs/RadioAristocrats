@@ -12,20 +12,11 @@ import ReachabilitySwift
 
 class PageContentViewController: UIViewController {
     
-    private struct Endpoint {
-        static let MusicBestQualityUrl = "http://144.76.79.38:8000/live2"
-        static let MusicGPRSUrl = "http://144.76.79.38:8000/live2-64"
-    }
-    
-    private enum MusicQuality: Int {
-        case Best = 0
-        case GPRS = 1
-    }
-    
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
     private var channel: RadioManager.ChannelType?
-
+    private var quality: RadioManager.MusicQuality?
+    
     var pageIndex: Int?
 
     @IBOutlet weak var playButton: UIButton!
@@ -35,28 +26,45 @@ class PageContentViewController: UIViewController {
     
     // MARK: - View Controller Lifecycle
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.setupInitialUIAndPlayer()
-        self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
-        
+    override func viewDidLoad() {
         if let channel = RadioManager.ChannelType(rawValue: self.pageIndex!) {
             self.channel = channel
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
         
+        if let quality = RadioManager.MusicQuality(rawValue: self.musicQuialitySegmentedControl.selectedSegmentIndex) {
+            self.quality = quality
+        } else {
+            assertionFailure("*** Failed to set music quality!")
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.setupInitialUIAndPlayer()
+        self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
+        
         RadioManager.sharedInstance.fetchTrack(self.channel!) {
-            (track: Track?, error: NSError?) -> Void in
+            (response: (track: Track?, message: String?), error: NSError?) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if let track = track {
+                if let track = response.track {
                     print("Track: \(track.artist) \(track.title)")
                     self.trackTitleLabel.text = track.title
                     self.artistNameLabel.text = track.artist
                 }
+                
+                if let message = response.message {
+                    if !message.containsString("Now On Air:") {
+                        print("*** Couldn't extract track information!")
+                        self.trackTitleLabel.text = "Oops, something went wrong!"
+                        self.artistNameLabel.text = message
+                    }
+                }
             })
         }
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -80,21 +88,13 @@ class PageContentViewController: UIViewController {
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
         
-        if let index = MusicQuality(rawValue : sender.selectedSegmentIndex) {
+        if let index = RadioManager.MusicQuality(rawValue: sender.selectedSegmentIndex) {
             
             self.player?.pause()
             self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
             self.player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
             
-            switch index {
-            case .Best:
-                self.setupPlayer(.Best)
-                print("Best")
-            case .GPRS:
-                self.setupPlayer(.GPRS)
-                print("GPRS")
-            }
-            
+            self.setupPlayer(self.channel!, quality: index)
             self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
 
         } else {
@@ -128,12 +128,12 @@ class PageContentViewController: UIViewController {
         
         if reachability!.isReachable() {
             if reachability!.isReachableViaWiFi() {
-                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
-                self.setupPlayer(.Best)
+                musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Best.rawValue
+                self.setupPlayer(self.channel!, quality: RadioManager.MusicQuality.Best)
                 print("Reachable via WiFi")
             } else {
-                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.GPRS.rawValue
-                self.setupPlayer(.GPRS)
+                musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Edge.rawValue
+                self.setupPlayer(self.channel!, quality: RadioManager.MusicQuality.Edge)
                 print("Reachable via Cellular")
             }
         } else {
@@ -141,16 +141,8 @@ class PageContentViewController: UIViewController {
         }
     }
     
-    private func setupPlayer(quality: MusicQuality) -> Void {
-        var url: NSURL?
-        
-        switch quality {
-            case .Best:
-                url = NSURL(string: Endpoint.MusicBestQualityUrl)
-            case .GPRS:
-                url = NSURL(string: Endpoint.MusicGPRSUrl)
-        }
-        
+    private func setupPlayer(channel: RadioManager.ChannelType, quality: RadioManager.MusicQuality) -> Void {
+        let url = NSURL(string: RadioManager.Endpoint.Music(channel, quality).urlString())
         let playerItem = AVPlayerItem(URL: url!)
         self.player = AVPlayer(playerItem: playerItem)
     }
