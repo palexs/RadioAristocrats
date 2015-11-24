@@ -10,6 +10,9 @@ import Foundation
 
 class RadioManager {
     
+    private static let xmlBaseUrl = "http://aristocrats.fm"
+    private static let musicBaseUrl = "http://144.76.79.38:8000"
+    
     enum ChannelType: Int {
         case Stream = 0
         case AMusic = 1
@@ -30,11 +33,11 @@ class RadioManager {
             case .XML(let channel):
                 switch channel {
                     case .Stream:
-                        return "http://aristocrats.fm/service/NowOnAir.xml"
+                        return "\(xmlBaseUrl)/service/NowOnAir.xml"
                     case .AMusic:
-                        return "http://aristocrats.fm/service/nowplaying-amusic.xml"
+                        return "\(xmlBaseUrl)/service/nowplaying-amusic.xml"
                     case .Jazz:
-                        return "http://aristocrats.fm/service/nowplaying-ajazz.xml"
+                        return "\(xmlBaseUrl)/service/nowplaying-ajazz.xml"
                 }
 
             case .Music(let channel, let quality):
@@ -42,20 +45,20 @@ class RadioManager {
                     case .Best:
                         switch channel {
                             case .Stream:
-                                return "http://144.76.79.38:8000/live2"
+                                return "\(musicBaseUrl)/live2"
                             case .AMusic:
-                                return "http://144.76.79.38:8000/amusic-128"
+                                return "\(musicBaseUrl)/amusic-128"
                             case .Jazz:
-                                return "http://144.76.79.38:8000/ajazz"
+                                return "\(musicBaseUrl)/ajazz"
                         }
                     case .Edge:
                         switch channel {
                             case .Stream:
-                                return "http://144.76.79.38:8000/live2-64"
+                                return "\(musicBaseUrl)/live2-64"
                             case .AMusic:
-                                return "http://144.76.79.38:8000/amusic-64"
+                                return "\(musicBaseUrl)/amusic-64"
                             case .Jazz:
-                                return "http://144.76.79.38:8000/ajazz"
+                                return "\(musicBaseUrl)/ajazz"
                         }
                     
                 }
