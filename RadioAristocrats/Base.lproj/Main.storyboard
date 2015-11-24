@@ -79,7 +79,7 @@
                                         <rect key="frame" x="95" y="8" width="125.5" height="29"/>
                                         <segments>
                                             <segment title="Лучшее"/>
-                                            <segment title="GPRS"/>
+                                            <segment title="EDGE"/>
                                         </segments>
                                         <connections>
                                             <action selector="indexChanged:" destination="gxK-tD-wH4" eventType="valueChanged" id="1qe-ZZ-og5"/>
