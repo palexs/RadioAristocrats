@@ -22,15 +22,15 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         super.viewDidLoad()
 
         // Setup PageViewController
-        self.pageViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
-        self.pageViewController.dataSource = self
+        pageViewController = storyboard?.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
+        pageViewController.dataSource = self
         let startingViewController: PageContentViewController = viewControllerAtIndex(0) as! PageContentViewController
-        self.pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
-        self.pageViewController.view.frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
-        startingViewController.willMoveToParentViewController(self.pageViewController)
-        self.addChildViewController(self.pageViewController)
-        self.view.addSubview(self.pageViewController.view)
-        self.pageViewController.didMoveToParentViewController(self)
+        pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
+        pageViewController.view.frame = CGRectMake(0, 0, view.bounds.width, view.bounds.height)
+        startingViewController.willMoveToParentViewController(pageViewController)
+        addChildViewController(pageViewController)
+        view.addSubview(pageViewController.view)
+        pageViewController.didMoveToParentViewController(self)
         
         // Setup PageControl
         let pageControl = UIPageControl.appearance()
@@ -49,7 +49,7 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
             return nil
         }
         
-        return self.viewControllerAtIndex(index)
+        return viewControllerAtIndex(index)
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
@@ -60,7 +60,7 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         }
         index--
         
-        return self.viewControllerAtIndex(index)
+        return viewControllerAtIndex(index)
         
     }
     
@@ -69,7 +69,7 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
             return nil
         }
         
-        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as! PageContentViewController
+        let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as! PageContentViewController
         
         pageContentViewController.pageIndex = index
         

@@ -12,8 +12,8 @@ class Track {
    var title: String?
    var artist: String?
     
-    init(title: String, artist: String) {
-        self.title = title
-        self.artist = artist
+    init(title aTitle: String, artist anArtist: String) {
+        title = aTitle
+        artist = anArtist
     }
 }

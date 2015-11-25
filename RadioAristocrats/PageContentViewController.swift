@@ -28,8 +28,8 @@ class PageContentViewController: UIViewController {
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
-        if let channel = RadioManager.ChannelType(rawValue: self.pageIndex!) {
-            self.channel = channel
+        if let aChannel = RadioManager.ChannelType(rawValue: pageIndex!) {
+            channel = aChannel
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
@@ -38,23 +38,24 @@ class PageContentViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.setupInitialUIAndPlayer()
-        self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
+        setupInitialUIAndPlayer()
+        player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         
-        RadioManager.sharedInstance.fetchTrack(self.channel!) {
+        RadioManager.sharedInstance.fetchTrack(channel!) {
             (response: (track: Track?, message: String?), error: NSError?) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { [unowned self] () -> Void in
+            dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
+                guard let strongSelf = self else { return }
                 if let track = response.track {
                     print("Track: \(track.artist) \(track.title)")
-                    self.trackTitleLabel.text = track.title
-                    self.artistNameLabel.text = track.artist
+                    strongSelf.trackTitleLabel.text = track.title
+                    strongSelf.artistNameLabel.text = track.artist
                 }
                 
                 if let message = response.message {
-                    if !message.containsString(self.kAnnouncementDisplayOk) {
+                    if !message.containsString(strongSelf.kAnnouncementDisplayOk) {
                         print("*** Couldn't extract track information!")
-                        self.trackTitleLabel.text = "Oops, something went wrong!"
-                        self.artistNameLabel.text = message
+                        strongSelf.trackTitleLabel.text = "Oops, something went wrong!"
+                        strongSelf.artistNameLabel.text = message
                     }
                 }
             })
@@ -63,8 +64,8 @@ class PageContentViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        self.player?.pause()
-        self.player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+        player?.pause()
+        player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
     }
     
     // MARK: - IBActions
@@ -72,12 +73,12 @@ class PageContentViewController: UIViewController {
     @IBAction func playButtonTouched(sender: UIButton) {
         print("Play button touched.")
         
-        if (self.player?.rate == 0.0) {
-            self.player?.play()
-            self.playButton.setImage(UIImage(named: "pause"), forState: .Normal)
+        if (player?.rate == 0.0) {
+            player?.play()
+            playButton.setImage(UIImage(named: "pause"), forState: .Normal)
         } else {
-            self.player?.pause()
-            self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+            player?.pause()
+            playButton.setImage(UIImage(named: "play"), forState: .Normal)
         }
     }
     
@@ -85,12 +86,12 @@ class PageContentViewController: UIViewController {
         
         if let index = RadioManager.MusicQuality(rawValue: sender.selectedSegmentIndex) {
             
-            self.player?.pause()
-            self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
-            self.player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+            player?.pause()
+            playButton.setImage(UIImage(named: "play"), forState: .Normal)
+            player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
             
-            self.setupPlayer(self.channel!, quality: index)
-            self.player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
+            setupPlayer(channel!, quality: index)
+            player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
 
         } else {
             assertionFailure("*** Invalid segmented control index!")
@@ -111,7 +112,7 @@ class PageContentViewController: UIViewController {
     // MARK: - Private methods
     
     private func setupInitialUIAndPlayer() -> Void {
-        self.playButton.setImage(UIImage(named: "play"), forState: .Normal)
+        playButton.setImage(UIImage(named: "play"), forState: .Normal)
         
         let reachability: Reachability?
         do {
@@ -124,11 +125,11 @@ class PageContentViewController: UIViewController {
         if reachability!.isReachable() {
             if reachability!.isReachableViaWiFi() {
                 musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Best.rawValue
-                self.setupPlayer(self.channel!, quality: RadioManager.MusicQuality.Best)
+                setupPlayer(channel!, quality: RadioManager.MusicQuality.Best)
                 print("Reachable via WiFi")
             } else {
                 musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Edge.rawValue
-                self.setupPlayer(self.channel!, quality: RadioManager.MusicQuality.Edge)
+                setupPlayer(channel!, quality: RadioManager.MusicQuality.Edge)
                 print("Reachable via Cellular")
             }
         } else {
@@ -139,7 +140,7 @@ class PageContentViewController: UIViewController {
     private func setupPlayer(channel: RadioManager.ChannelType, quality: RadioManager.MusicQuality) -> Void {
         let url = NSURL(string: RadioManager.Endpoint.Music(channel, quality).urlString())
         let playerItem = AVPlayerItem(URL: url!)
-        self.player = AVPlayer(playerItem: playerItem)
+        player = AVPlayer(playerItem: playerItem)
     }
     
 }
