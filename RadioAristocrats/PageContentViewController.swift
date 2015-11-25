@@ -12,6 +12,8 @@ import ReachabilitySwift
 
 class PageContentViewController: UIViewController {
     
+    private let kAnnouncementDisplayOk = "Now On Air:"
+    
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
     private var channel: RadioManager.ChannelType?
@@ -41,7 +43,7 @@ class PageContentViewController: UIViewController {
         
         RadioManager.sharedInstance.fetchTrack(self.channel!) {
             (response: (track: Track?, message: String?), error: NSError?) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            dispatch_async(dispatch_get_main_queue(), { [unowned self] () -> Void in
                 if let track = response.track {
                     print("Track: \(track.artist) \(track.title)")
                     self.trackTitleLabel.text = track.title
@@ -49,7 +51,7 @@ class PageContentViewController: UIViewController {
                 }
                 
                 if let message = response.message {
-                    if !message.containsString("Now On Air:") {
+                    if !message.containsString(self.kAnnouncementDisplayOk) {
                         print("*** Couldn't extract track information!")
                         self.trackTitleLabel.text = "Oops, something went wrong!"
                         self.artistNameLabel.text = message

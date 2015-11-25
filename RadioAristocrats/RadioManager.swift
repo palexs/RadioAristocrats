@@ -10,8 +10,8 @@ import Foundation
 
 class RadioManager {
     
-    private static let xmlBaseUrl = "http://aristocrats.fm"
-    private static let musicBaseUrl = "http://144.76.79.38:8000"
+    private static let kXMLBaseUrl = "http://aristocrats.fm"
+    private static let kMusicBaseUrl = "http://144.76.79.38:8000"
     
     enum ChannelType: Int {
         case Stream = 0
@@ -33,11 +33,11 @@ class RadioManager {
             case .XML(let channel):
                 switch channel {
                     case .Stream:
-                        return "\(xmlBaseUrl)/service/NowOnAir.xml"
+                        return "\(kXMLBaseUrl)/service/NowOnAir.xml"
                     case .AMusic:
-                        return "\(xmlBaseUrl)/service/nowplaying-amusic.xml"
+                        return "\(kXMLBaseUrl)/service/nowplaying-amusic.xml"
                     case .Jazz:
-                        return "\(xmlBaseUrl)/service/nowplaying-ajazz.xml"
+                        return "\(kXMLBaseUrl)/service/nowplaying-ajazz.xml"
                 }
 
             case .Music(let channel, let quality):
@@ -45,20 +45,20 @@ class RadioManager {
                     case .Best:
                         switch channel {
                             case .Stream:
-                                return "\(musicBaseUrl)/live2"
+                                return "\(kMusicBaseUrl)/live2"
                             case .AMusic:
-                                return "\(musicBaseUrl)/amusic-128"
+                                return "\(kMusicBaseUrl)/amusic-128"
                             case .Jazz:
-                                return "\(musicBaseUrl)/ajazz"
+                                return "\(kMusicBaseUrl)/ajazz"
                         }
                     case .Edge:
                         switch channel {
                             case .Stream:
-                                return "\(musicBaseUrl)/live2-64"
+                                return "\(kMusicBaseUrl)/live2-64"
                             case .AMusic:
-                                return "\(musicBaseUrl)/amusic-64"
+                                return "\(kMusicBaseUrl)/amusic-64"
                             case .Jazz:
-                                return "\(musicBaseUrl)/ajazz"
+                                return "\(kMusicBaseUrl)/ajazz"
                         }
                     
                 }
