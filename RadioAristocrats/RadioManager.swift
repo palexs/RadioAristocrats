@@ -8,23 +8,23 @@
 
 import Foundation
 
+enum ChannelType: Int {
+    case Stream = 0
+    case AMusic = 1
+    case Jazz = 2
+}
+
+enum MusicQuality: Int {
+    case Best = 0
+    case Edge = 1
+}
+
 class RadioManager {
     
     private static let kXMLBaseUrl = "http://aristocrats.fm"
     private static let kMusicBaseUrl = "http://144.76.79.38:8000"
     
-    enum ChannelType: Int {
-        case Stream = 0
-        case AMusic = 1
-        case Jazz = 2
-    }
-    
-    enum MusicQuality: Int {
-        case Best = 0
-        case Edge = 1
-    }
-    
-    enum Endpoint {
+    private enum Endpoint {
         case XML(ChannelType)
         case Music(ChannelType, MusicQuality)
         
@@ -74,7 +74,11 @@ class RadioManager {
         return Static.instance
     }
     
-    private func HTTPsendRequest(request: NSMutableURLRequest, callback: (NSData?, NSError?) -> Void) {
+    class func endpointUrlString(channel: ChannelType, quality: MusicQuality) -> String {
+        return Endpoint.Music(channel, quality).urlString()
+    }
+    
+    private func HTTPSendRequest(request: NSMutableURLRequest, callback: (NSData?, NSError?) -> Void) {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {
             data, response, error in
                 if error != nil {
@@ -89,7 +93,7 @@ class RadioManager {
     
     private func HTTPGet(url: String, callback: (NSData?, NSError?) -> Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        HTTPsendRequest(request, callback: callback)
+        HTTPSendRequest(request, callback: callback)
     }
     
     func fetchTrack(channel: ChannelType, callback: ((track: Track?, message: String?), NSError?) -> Void) {

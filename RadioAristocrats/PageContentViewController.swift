@@ -16,7 +16,7 @@ class PageContentViewController: UIViewController {
     
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
-    private var channel: RadioManager.ChannelType?
+    private var channel: ChannelType?
     
     var pageIndex: Int?
 
@@ -28,7 +28,7 @@ class PageContentViewController: UIViewController {
     // MARK: - View Controller Lifecycle
     
     override func viewDidLoad() {
-        if let aChannel = RadioManager.ChannelType(rawValue: pageIndex!) {
+        if let aChannel = ChannelType(rawValue: pageIndex!) {
             channel = aChannel
         } else {
             assertionFailure("*** Failed to set channel type!")
@@ -84,7 +84,7 @@ class PageContentViewController: UIViewController {
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
         
-        if let index = RadioManager.MusicQuality(rawValue: sender.selectedSegmentIndex) {
+        if let index = MusicQuality(rawValue: sender.selectedSegmentIndex) {
             
             player?.pause()
             playButton.setImage(UIImage(named: "play"), forState: .Normal)
@@ -124,12 +124,12 @@ class PageContentViewController: UIViewController {
         
         if reachability!.isReachable() {
             if reachability!.isReachableViaWiFi() {
-                musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Best.rawValue
-                setupPlayer(channel!, quality: RadioManager.MusicQuality.Best)
+                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
+                setupPlayer(channel!, quality: MusicQuality.Best)
                 print("Reachable via WiFi")
             } else {
-                musicQuialitySegmentedControl.selectedSegmentIndex = RadioManager.MusicQuality.Edge.rawValue
-                setupPlayer(channel!, quality: RadioManager.MusicQuality.Edge)
+                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Edge.rawValue
+                setupPlayer(channel!, quality: MusicQuality.Edge)
                 print("Reachable via Cellular")
             }
         } else {
@@ -137,8 +137,8 @@ class PageContentViewController: UIViewController {
         }
     }
     
-    private func setupPlayer(channel: RadioManager.ChannelType, quality: RadioManager.MusicQuality) -> Void {
-        let url = NSURL(string: RadioManager.Endpoint.Music(channel, quality).urlString())
+    private func setupPlayer(channel: ChannelType, quality: MusicQuality) -> Void {
+        let url = NSURL(string: RadioManager.endpointUrlString(channel, quality: quality))
         let playerItem = AVPlayerItem(URL: url!)
         player = AVPlayer(playerItem: playerItem)
     }

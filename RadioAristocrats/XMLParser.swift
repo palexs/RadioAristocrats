@@ -11,7 +11,7 @@ import SWXMLHash
 
 class XMLParser {
     
-    class func parse(xmlString: String, channel: RadioManager.ChannelType) -> (Track?, String?) {
+    class func parse(xmlString: String, channel: ChannelType) -> (Track?, String?) {
         let xml = SWXMLHash.parse(xmlString)
         var title: String?
         var artist: String?
