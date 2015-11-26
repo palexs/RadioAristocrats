@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController, UIPageViewControllerDataSource {
 
@@ -37,6 +38,19 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
         pageControl.currentPageIndicatorTintColor = UIColor.darkGrayColor()
         pageControl.backgroundColor = UIColor.clearColor()
+        
+        // Setup background playback
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                print("AVAudioSession Category Playback Ok and AVAudioSession is set to active.")
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
     }
 
     // MARK: - UIPageViewController DataSource

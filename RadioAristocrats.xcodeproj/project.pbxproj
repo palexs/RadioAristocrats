@@ -207,6 +207,11 @@
 					FD74E2D61AA87A3400EFF16B = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = VESU9R73S8;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					FD74E2EB1AA87A3400EFF16B = {
 						CreatedOnToolsVersion = 6.3;
