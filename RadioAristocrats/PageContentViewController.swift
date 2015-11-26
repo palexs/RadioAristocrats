@@ -86,12 +86,15 @@ class PageContentViewController: UIViewController {
         
         if let index = MusicQuality(rawValue: sender.selectedSegmentIndex) {
             
-            player?.pause()
-            playButton.setImage(UIImage(named: "play"), forState: .Normal)
-            player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+            let wasPlaying = player?.rate != 0.0
             
+            player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
             setupPlayer(channel!, quality: index)
             player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
+            
+            if (wasPlaying) {
+                player?.play()
+            }
 
         } else {
             assertionFailure("*** Invalid segmented control index!")
