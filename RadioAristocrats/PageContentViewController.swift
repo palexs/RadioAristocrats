@@ -13,6 +13,9 @@ import ReachabilitySwift
 class PageContentViewController: UIViewController {
     
     private let kAnnouncementDisplayOk = "Now On Air:"
+    private let kDefaultStreamColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
+    private let kDefaultAMusicColor = UIColor(red: 0/255, green: 48/255, blue: 74/255, alpha: 1.0) // #00304A
+    private let kDefaultJazzColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
     
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
@@ -39,6 +42,8 @@ class PageContentViewController: UIViewController {
         super.viewWillAppear(animated)
         
         setupInitialUIAndPlayer()
+        setupDefaultColors()
+        
         player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         
         RadioManager.sharedInstance.fetchTrack(channel!) {
@@ -66,6 +71,7 @@ class PageContentViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         player?.pause()
         player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+        player = nil
     }
     
     // MARK: - IBActions
@@ -73,13 +79,14 @@ class PageContentViewController: UIViewController {
     @IBAction func playButtonTouched(sender: UIButton) {
         print("Play button touched.")
         
+        updatePlayButton()
+        
         if (player?.rate == 0.0) {
             player?.play()
-            playButton.setImage(UIImage(named: "pause"), forState: .Normal)
         } else {
             player?.pause()
-            playButton.setImage(UIImage(named: "play"), forState: .Normal)
         }
+        
     }
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
@@ -115,7 +122,8 @@ class PageContentViewController: UIViewController {
     // MARK: - Private methods
     
     private func setupInitialUIAndPlayer() -> Void {
-        playButton.setImage(UIImage(named: "play"), forState: .Normal)
+
+        updatePlayButton()
         
         let reachability: Reachability?
         do {
@@ -144,6 +152,39 @@ class PageContentViewController: UIViewController {
         let url = NSURL(string: RadioManager.endpointUrlString(channel, quality: quality))
         let playerItem = AVPlayerItem(URL: url!)
         player = AVPlayer(playerItem: playerItem)
+    }
+    
+    private func updatePlayButton() {
+        var image: UIImage?
+        
+        if (player != nil && player?.rate == 0.0) {
+            switch channel! {
+                case .Stream, .Jazz:
+                    image = UIImage(named: "pause")
+                case .AMusic:
+                    image = UIImage(named: "pause_a")
+            }
+        } else {
+            switch channel! {
+            case .Stream, .Jazz:
+                image = UIImage(named: "play")
+            case .AMusic:
+                image = UIImage(named: "play_a")
+            }
+        }
+        
+        playButton.setImage(image, forState: .Normal)
+    }
+    
+    private func setupDefaultColors() {
+        switch channel! {
+            case .Stream:
+                musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
+            case .AMusic:
+                musicQuialitySegmentedControl.tintColor = kDefaultAMusicColor
+            case .Jazz:
+                musicQuialitySegmentedControl.tintColor = kDefaultJazzColor
+        }
     }
     
 }
