@@ -8,6 +8,9 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
+
+let ViewControllerRemotePlayPauseCommandReceivedNotification = "RemotePlayPauseCommandReceivedNotification"
 
 class ViewController: UIViewController, UIPageViewControllerDataSource {
 
@@ -51,6 +54,16 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
+        
+        // Setup Remote Command Center
+        MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "remotePlayPauseCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.addTarget(self, action: "remotePlayPauseCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().playCommand.enabled = true
+        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.enabled = true
+        MPRemoteCommandCenter.sharedCommandCenter().previousTrackCommand.enabled = false
+        MPRemoteCommandCenter.sharedCommandCenter().nextTrackCommand.enabled = false
+        MPRemoteCommandCenter.sharedCommandCenter().seekBackwardCommand.enabled = false
+        MPRemoteCommandCenter.sharedCommandCenter().seekForwardCommand.enabled = false
     }
 
     // MARK: - UIPageViewController DataSource
@@ -97,6 +110,12 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
         return 0
     }
+    
+    // MARK: - Remote Command Center handlers
 
+    func remotePlayPauseCommandReceived() -> MPRemoteCommandHandlerStatus {
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        return .Success
+    }
 }
 

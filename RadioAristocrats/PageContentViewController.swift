@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import ReachabilitySwift
+import MediaPlayer
 
 class PageContentViewController: UIViewController {
     
@@ -45,15 +46,44 @@ class PageContentViewController: UIViewController {
         setupDefaultColors()
         
         player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
-        
+        NSNotificationCenter.defaultCenter().addObserverForName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notif) -> Void in
+            guard let strongSelf = self else { return }
+            // Redirect
+            strongSelf.playButtonTouched(nil)
+        }
+
         RadioManager.sharedInstance.fetchTrack(channel!) {
             (response: (track: Track?, message: String?), error: NSError?) -> Void in
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
+                
+                let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
+                var songInfo: [String: AnyObject] = [ // Default now playing info
+                    MPMediaItemPropertyTitle: "Unknown Title",
+                    MPMediaItemPropertyArtist: "Unknown Artist",
+                    MPMediaItemPropertyArtwork: defaultAlbumArtWork,
+                    MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
+                ]
+                
                 if let track = response.track {
                     print("Track: \(track.artist) \(track.title)")
-                    strongSelf.trackTitleLabel.text = track.title
-                    strongSelf.artistNameLabel.text = track.artist
+                    
+                    if let title = track.title {
+                        if !title.isEmpty {
+                            strongSelf.trackTitleLabel.text = title
+                            songInfo[MPMediaItemPropertyTitle] = title
+                        }
+                    }
+                    
+                    if let artist = track.artist {
+                        if !artist.isEmpty {
+                            strongSelf.artistNameLabel.text = artist
+                            songInfo[MPMediaItemPropertyArtist] = artist
+                        }
+                    }
+                    
+                    // TODO: songInfo[MPMediaItemPropertyArtwork] = ""
+                    
                 }
                 
                 if let message = response.message {
@@ -63,7 +93,11 @@ class PageContentViewController: UIViewController {
                         strongSelf.artistNameLabel.text = message
                     }
                 }
-            })
+                
+                songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber(integer: 0)
+                MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                
+                })
         }
         
     }
@@ -71,12 +105,13 @@ class PageContentViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         player?.pause()
         player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
         player = nil
     }
     
     // MARK: - IBActions
     
-    @IBAction func playButtonTouched(sender: UIButton) {
+    @IBAction func playButtonTouched(sender: UIButton?) {
         print("Play button touched.")
         
         updatePlayButton()
