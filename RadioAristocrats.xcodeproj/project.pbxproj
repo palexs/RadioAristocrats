@@ -19,6 +19,7 @@
 		FD74E3011AA896DB00EFF16B /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3001AA896DB00EFF16B /* Track.swift */; };
 		FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3021AA898E800EFF16B /* RadioManager.swift */; };
 		FD74E3051AA9A5DF00EFF16B /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */; };
+		FD878CEC1C0F3341002BC343 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD878CEE1C0F3341002BC343 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,15 @@
 		FD74E3001AA896DB00EFF16B /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		FD74E3021AA898E800EFF16B /* RadioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioManager.swift; sourceTree = "<group>"; };
 		FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParser.swift; sourceTree = "<group>"; };
+		FD878CEF1C0F3357002BC343 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		FD878CF01C0F3357002BC343 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FD878CF11C0F3357002BC343 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD878CF21C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/Main.strings"; sourceTree = "<group>"; };
+		FD878CF31C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		FD878CF41C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		FD878CF71C0F4FDE002BC343 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FD878CF91C0F506B002BC343 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		FD878CFA1C0F5072002BC343 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +131,7 @@
 				FD74E2E01AA87A3400EFF16B /* Main.storyboard */,
 				FD74E2E31AA87A3400EFF16B /* Images.xcassets */,
 				FD74E2E51AA87A3400EFF16B /* LaunchScreen.xib */,
+				FD878CEE1C0F3341002BC343 /* Localizable.strings */,
 				FD74E2DA1AA87A3400EFF16B /* Supporting Files */,
 			);
 			path = RadioAristocrats;
@@ -226,6 +237,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
+				"uk-UA",
 			);
 			mainGroup = FD74E2CE1AA87A3400EFF16B;
 			productRefGroup = FD74E2D81AA87A3400EFF16B /* Products */;
@@ -243,6 +256,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD878CEC1C0F3341002BC343 /* Localizable.strings in Resources */,
 				FD74E2E21AA87A3400EFF16B /* Main.storyboard in Resources */,
 				FD74E2E71AA87A3400EFF16B /* LaunchScreen.xib in Resources */,
 				FD74E2E41AA87A3400EFF16B /* Images.xcassets in Resources */,
@@ -343,6 +357,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				FD74E2E11AA87A3400EFF16B /* Base */,
+				FD878CEF1C0F3357002BC343 /* ru */,
+				FD878CF21C0F3363002BC343 /* uk-UA */,
+				FD878CF91C0F506B002BC343 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -351,8 +368,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				FD74E2E61AA87A3400EFF16B /* Base */,
+				FD878CF01C0F3357002BC343 /* ru */,
+				FD878CF31C0F3363002BC343 /* uk-UA */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		FD878CEE1C0F3341002BC343 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FD878CF11C0F3357002BC343 /* ru */,
+				FD878CF41C0F3363002BC343 /* uk-UA */,
+				FD878CF71C0F4FDE002BC343 /* en */,
+				FD878CFA1C0F5072002BC343 /* Base */,
+			);
+			name = Localizable.strings;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
