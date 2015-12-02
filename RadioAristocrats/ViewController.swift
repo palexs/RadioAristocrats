@@ -56,14 +56,15 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         }
         
         // Setup Remote Command Center
-        MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "remotePlayPauseCommandReceived")
-        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.addTarget(self, action: "remotePlayPauseCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "remotePlayCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.addTarget(self, action: "remotePauseCommandReceived")
         MPRemoteCommandCenter.sharedCommandCenter().playCommand.enabled = true
         MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.enabled = true
         MPRemoteCommandCenter.sharedCommandCenter().previousTrackCommand.enabled = false
         MPRemoteCommandCenter.sharedCommandCenter().nextTrackCommand.enabled = false
         MPRemoteCommandCenter.sharedCommandCenter().seekBackwardCommand.enabled = false
         MPRemoteCommandCenter.sharedCommandCenter().seekForwardCommand.enabled = false
+        
     }
 
     // MARK: - UIPageViewController DataSource
@@ -113,7 +114,12 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     
     // MARK: - Remote Command Center handlers
 
-    func remotePlayPauseCommandReceived() -> MPRemoteCommandHandlerStatus {
+    func remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        return .Success
+    }
+    
+    func remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
         NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
         return .Success
     }
