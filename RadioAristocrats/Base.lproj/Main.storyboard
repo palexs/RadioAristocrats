@@ -45,7 +45,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_ua" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-5B-TaV">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_ru" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-5B-TaV">
                                 <rect key="frame" x="175" y="90" width="250" height="47"/>
                                 <animations/>
                             </imageView>
@@ -150,7 +150,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo_ua" width="250" height="47"/>
+        <image name="logo_ru" width="250" height="47"/>
         <image name="play" width="150" height="150"/>
     </resources>
 </document>
