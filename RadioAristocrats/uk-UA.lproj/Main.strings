@@ -1,8 +1,8 @@
 
-/* Class = "UILabel"; text = "Unknown Track"; ObjectID = "Aqw-Jb-Eey"; */
+/* Class = "UILabel"; text = "Невідомий трек"; ObjectID = "Aqw-Jb-Eey"; */
 "Aqw-Jb-Eey.text" = "Невідомий трек";
 
-/* Class = "UISegmentedControl"; PCA-yn-K6M.segmentTitles[0] = "Лучшее"; ObjectID = "PCA-yn-K6M"; */
+/* Class = "UISegmentedControl"; PCA-yn-K6M.segmentTitles[0] = "Найкраща"; ObjectID = "PCA-yn-K6M"; */
 "PCA-yn-K6M.segmentTitles[0]" = "Найкраща";
 
 /* Class = "UISegmentedControl"; PCA-yn-K6M.segmentTitles[1] = "EDGE"; ObjectID = "PCA-yn-K6M"; */
@@ -11,5 +11,5 @@
 /* Class = "UILabel"; text = "Качество:"; ObjectID = "aQG-Ic-JKd"; */
 "aQG-Ic-JKd.text" = "Якість:";
 
-/* Class = "UILabel"; text = "Unknown Artist"; ObjectID = "o2h-TM-av0"; */
+/* Class = "UILabel"; text = "Невідомий виконавець"; ObjectID = "o2h-TM-av0"; */
 "o2h-TM-av0.text" = "Невідомий виконавець";

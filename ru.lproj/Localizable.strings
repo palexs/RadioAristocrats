@@ -5,3 +5,7 @@
   Created by Oleksandr Perepelitsyn on 12/2/15.
   Copyright © 2015 RadioAristocrats. All rights reserved.
 */
+
+"No_track_info" = "Упс, что-то пошло не так!";
+"Unknown_track" = "Неизвестный трек";
+"Unknown_artist" = "Неизвестный исполнитель";

@@ -57,8 +57,6 @@
 		FD878CF21C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/Main.strings"; sourceTree = "<group>"; };
 		FD878CF31C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FD878CF41C0F3363002BC343 /* uk-UA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uk-UA"; path = "uk-UA.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		FD878CF71C0F4FDE002BC343 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		FD878CF91C0F506B002BC343 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		FD878CFA1C0F5072002BC343 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -359,7 +357,6 @@
 				FD74E2E11AA87A3400EFF16B /* Base */,
 				FD878CEF1C0F3357002BC343 /* ru */,
 				FD878CF21C0F3363002BC343 /* uk-UA */,
-				FD878CF91C0F506B002BC343 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -379,7 +376,6 @@
 			children = (
 				FD878CF11C0F3357002BC343 /* ru */,
 				FD878CF41C0F3363002BC343 /* uk-UA */,
-				FD878CF71C0F4FDE002BC343 /* en */,
 				FD878CFA1C0F5072002BC343 /* Base */,
 			);
 			name = Localizable.strings;

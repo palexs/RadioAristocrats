@@ -139,6 +139,7 @@
                     </view>
                     <connections>
                         <outlet property="artistNameLabel" destination="o2h-TM-av0" id="GUc-ZC-GtR"/>
+                        <outlet property="logoImageView" destination="zQo-5B-TaV" id="lca-Uh-ODC"/>
                         <outlet property="musicQuialitySegmentedControl" destination="PCA-yn-K6M" id="YM1-To-2HW"/>
                         <outlet property="playButton" destination="zqj-5s-SPg" id="VAm-dn-OMO"/>
                         <outlet property="trackTitleLabel" destination="Aqw-Jb-Eey" id="xTB-uA-gmc"/>

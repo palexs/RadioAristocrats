@@ -1,5 +1,5 @@
 
-/* Class = "UILabel"; text = "Unknown Track"; ObjectID = "Aqw-Jb-Eey"; */
+/* Class = "UILabel"; text = "Неизвестный трек"; ObjectID = "Aqw-Jb-Eey"; */
 "Aqw-Jb-Eey.text" = "Неизвестный трек";
 
 /* Class = "UISegmentedControl"; PCA-yn-K6M.segmentTitles[0] = "Лучшее"; ObjectID = "PCA-yn-K6M"; */
@@ -11,5 +11,5 @@
 /* Class = "UILabel"; text = "Качество:"; ObjectID = "aQG-Ic-JKd"; */
 "aQG-Ic-JKd.text" = "Качество:";
 
-/* Class = "UILabel"; text = "Unknown Artist"; ObjectID = "o2h-TM-av0"; */
+/* Class = "UILabel"; text = "Неизвестный исполнитель"; ObjectID = "o2h-TM-av0"; */
 "o2h-TM-av0.text" = "Неизвестный исполнитель";
