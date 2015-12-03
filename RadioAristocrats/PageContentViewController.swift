@@ -18,6 +18,8 @@ class PageContentViewController: UIViewController {
     private let kDefaultAMusicColor = UIColor(red: 0/255, green: 48/255, blue: 74/255, alpha: 1.0) // #00304A
     private let kDefaultJazzColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
     
+    private let kThursday = 5
+    
     private var KVOContext: UInt8 = 1
     private var player: AVPlayer?
     private var channel: ChannelType?
@@ -28,6 +30,7 @@ class PageContentViewController: UIViewController {
     @IBOutlet weak var trackTitleLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var musicQuialitySegmentedControl: UISegmentedControl!
+    @IBOutlet weak var logoImageView: UIImageView!
     
     // MARK: - View Controller Lifecycle
     
@@ -44,6 +47,7 @@ class PageContentViewController: UIViewController {
         
         setupInitialUIAndPlayer()
         setupDefaultColors()
+        setupLogoImage()
         
         player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         NSNotificationCenter.defaultCenter().addObserverForName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notif) -> Void in
@@ -51,6 +55,8 @@ class PageContentViewController: UIViewController {
             // Redirect
             strongSelf.playButtonTouched(nil)
         }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setupLogoImage", name: UIApplicationSignificantTimeChangeNotification , object: nil)
 
         RadioManager.sharedInstance.fetchTrack(channel!) {
             (response: (track: Track?, message: String?), error: NSError?) -> Void in
@@ -60,8 +66,8 @@ class PageContentViewController: UIViewController {
                 // Set default now playing info
                 let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
                 var songInfo: [String: AnyObject] = [
-                    MPMediaItemPropertyTitle: "Unknown Title",
-                    MPMediaItemPropertyArtist: "Unknown Artist",
+                    MPMediaItemPropertyTitle: NSLocalizedString("Unknown_track", comment: "Unknown track"),
+                    MPMediaItemPropertyArtist: NSLocalizedString("Unknown_artist", comment: "Unknown artist"),
                     MPMediaItemPropertyArtwork: defaultAlbumArtWork,
                     MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
                 ]
@@ -92,8 +98,8 @@ class PageContentViewController: UIViewController {
                                     
                                     if let img = image {
                                         songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: img)
-                                        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
                                     }
+                                    MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
                                 })
                             })
                         }
@@ -104,7 +110,7 @@ class PageContentViewController: UIViewController {
                 if let message = response.message {
                     if !message.containsString(strongSelf.kAnnouncementDisplayOk) {
                         print("*** Couldn't extract track information!")
-                        strongSelf.trackTitleLabel.text = "Oops, something went wrong!"
+                        strongSelf.trackTitleLabel.text = NSLocalizedString("No_track_info", comment: "Oops, something went wrong!")
                         strongSelf.artistNameLabel.text = message
                     }
                 }
@@ -116,6 +122,7 @@ class PageContentViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         player?.pause()
         player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
         player = nil
         
@@ -233,6 +240,24 @@ class PageContentViewController: UIViewController {
             case .Jazz:
                 musicQuialitySegmentedControl.tintColor = kDefaultJazzColor
         }
+    }
+    
+    private func setupLogoImage() -> Void {
+        let dayOfTheWeek = getTodayDayOfWeek()
+        if (dayOfTheWeek == kThursday) {
+            logoImageView.image = UIImage(named: "logo_ua")
+        } else {
+            logoImageView.image = UIImage(named: "logo_ru")
+        }
+    }
+    
+    func getTodayDayOfWeek() -> Int {
+        let formatter  = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let myCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let myComponents = myCalendar.components(.Weekday, fromDate: NSDate()) // NSDate() returns today
+        let weekDay = myComponents.weekday
+        return weekDay
     }
     
 }
