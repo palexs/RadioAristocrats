@@ -90,11 +90,8 @@ class PageContentViewController: UIViewController {
         p_setUkrainianLanguageIfThursday()
         
         player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
-        NSNotificationCenter.defaultCenter().addObserverForName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notif) -> Void in
-            guard let strongSelf = self else { return }
-            // Redirect
-            strongSelf.playButtonTouched(nil)
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_setUkrainianLanguageIfThursday", name: UIApplicationSignificantTimeChangeNotification , object: nil)
 
@@ -164,7 +161,8 @@ class PageContentViewController: UIViewController {
         player?.pause()
         player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
         player = nil
         
         super.viewWillDisappear(animated)

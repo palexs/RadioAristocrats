@@ -10,7 +10,8 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-let ViewControllerRemotePlayPauseCommandReceivedNotification = "RemotePlayPauseCommandReceivedNotification"
+let ViewControllerRemotePlayCommandReceivedNotification = "RemotePlayCommandReceivedNotification"
+let ViewControllerRemotePauseCommandReceivedNotification = "RemotePauseCommandReceivedNotification"
 
 class ViewController: UIViewController, UIPageViewControllerDataSource {
 
@@ -115,12 +116,12 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     // MARK: - Remote Command Center handlers
 
     func remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayCommandReceivedNotification, object: self)
         return .Success
     }
     
     func remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePauseCommandReceivedNotification, object: self)
         return .Success
     }
 }
