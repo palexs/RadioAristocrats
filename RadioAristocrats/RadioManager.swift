@@ -93,7 +93,7 @@ class RadioManager {
     func fetchTrack(channel: ChannelType, callback: ((track: Track?, message: String?), NSError?) -> Void) {
         let urlString = Endpoint.XML(channel).urlString()
         
-        HTTPGet(urlString) {
+        p_HTTPGet(urlString) {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
@@ -107,14 +107,14 @@ class RadioManager {
     }
     
     func fetchArtwork(artist: String, callback: (UIImage?, NSError?) -> Void) {
-        fetchArtworkUrl(artist) { [weak self]
+        p_fetchArtworkUrl(artist) { [weak self]
             (artworkUrlString: String?, error: NSError?) -> Void in
             guard let strongSelf = self else { return }
             
             if (error != nil || artworkUrlString == nil) {
                 callback(nil, error)
             } else {
-                strongSelf.imageFromUrl(artworkUrlString!, callback: callback)
+                strongSelf.p_imageFromUrl(artworkUrlString!, callback: callback)
             }
             
         }
@@ -122,7 +122,7 @@ class RadioManager {
 
     // MARK: - Private methods
     
-    private func HTTPSendRequest(request: NSMutableURLRequest, callback: (NSData?, NSError?) -> Void) {
+    private func p_HTTPSendRequest(request: NSMutableURLRequest, callback: (NSData?, NSError?) -> Void) {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {
             data, response, error in
                 if error != nil {
@@ -135,15 +135,15 @@ class RadioManager {
         task.resume()
     }
     
-    private func HTTPGet(url: String, callback: (NSData?, NSError?) -> Void) {
+    private func p_HTTPGet(url: String, callback: (NSData?, NSError?) -> Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        HTTPSendRequest(request, callback: callback)
+        p_HTTPSendRequest(request, callback: callback)
     }
     
-    private func fetchArtworkUrl(artist: String, callback: (String?, NSError?) -> Void) {
+    private func p_fetchArtworkUrl(artist: String, callback: (String?, NSError?) -> Void) {
         let urlString = Endpoint.Artwork(artist).urlString()
         
-        HTTPGet(urlString) { [weak self]
+        p_HTTPGet(urlString) { [weak self]
             (data: NSData?, error: NSError?) -> Void in
             guard let strongSelf = self else { return }
             
@@ -182,7 +182,7 @@ class RadioManager {
         }
     }
     
-    private func imageFromUrl(urlString: String, callback: (UIImage?, NSError?) -> Void) {
+    private func p_imageFromUrl(urlString: String, callback: (UIImage?, NSError?) -> Void) {
         if let url = NSURL(string: urlString) {
             let request = NSURLRequest(URL: url)
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
