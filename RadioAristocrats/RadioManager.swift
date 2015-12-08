@@ -24,15 +24,33 @@ enum MusicQuality: Int {
 }
 
 enum RadioManagerError: ErrorType { // Consider using String
-    case NetworkRequestError
-    case NetworkDataInconsistencyError
-    case DataTransformationError
-    case FailedToObtainTrackInfo
+    // Generic errors
+    case NetworkRequestError(String)
+    case NetworkDataInconsistencyError(String)
+    case DataTransformationError(String)
+    // Specific errors
+    case FailedToObtainTrackInfo(String)
+    case FailedToObtainArtworkURL(String)
+    
+    func toString() -> String {
+        switch self {
+        case .NetworkRequestError(let message):
+            return message
+        case .NetworkDataInconsistencyError(let message):
+            return message
+        case DataTransformationError(let message):
+            return message
+        case FailedToObtainTrackInfo(let message):
+            return message
+        case FailedToObtainArtworkURL(let message):
+            return message
+        }
+    }
 }
 
 enum Result<T> {
     case Success(T)
-    case Failure(RadioManagerError, String)
+    case Failure(RadioManagerError)
 }
 
 class RadioManager {
@@ -42,7 +60,6 @@ class RadioManager {
     private static let kArtworksBaseUrl = "http://ws.audioscrobbler.com/2.0"
     
     private static let kAPIKey = "690e1ed3bc00bc91804cd8f7fe5ed6d4"
-    private let kErrorDomain = "aristocrats.fm.Error.RadioManager"
     
     private enum Endpoint {
         case XML(ChannelType)
@@ -111,17 +128,17 @@ class RadioManager {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
-                callback(.Failure(.NetworkRequestError, error!.localizedDescription))
+                callback(.Failure(.NetworkRequestError(error!.localizedDescription)))
             } else {
                 guard let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) else {
-                    callback(.Failure(.DataTransformationError, "Failed to initialize XML string with data."))
+                    callback(.Failure(.DataTransformationError("Failed to initialize XML string with data.")))
                     return
                 }
                 
                 let (track, message) = XMLParser.parse(xmlString as String, channel: channel)
                 
                 guard track != nil else {
-                    callback(.Failure(.DataTransformationError, "Failed to parse XML and create Track object."))
+                    callback(.Failure(.DataTransformationError("Failed to parse XML and create Track object.")))
                     return
                 }
                 
@@ -129,7 +146,7 @@ class RadioManager {
                     if message.containsString(kAnnouncementDisplayOk) {
                         callback(.Success(track!))
                     } else {
-                        callback(.Failure(.FailedToObtainTrackInfo, message))
+                        callback(.Failure(.FailedToObtainTrackInfo(message)))
                     }
                 } else {
                     callback(.Success(track!))
@@ -140,13 +157,14 @@ class RadioManager {
     
     func fetchArtwork(artist: String, callback: (Result<UIImage>) -> Void) {
         p_fetchArtworkUrl(artist) { [weak self]
-            (artworkUrlString: String?, error: NSError?) -> Void in
+            (result: Result<String>) -> Void in
             guard let strongSelf = self else { return }
             
-            if (error != nil || artworkUrlString == nil) {
-                callback(.Failure(.NetworkRequestError, error!.localizedDescription))
-            } else {
-                strongSelf.p_imageFromUrl(artworkUrlString!, callback: callback)
+            switch result {
+            case .Success(let artworkUrlString):
+                strongSelf.p_imageFromUrl(artworkUrlString, callback: callback)
+            case .Failure(let error):
+                callback(.Failure(error))
             }
             
         }
@@ -172,29 +190,23 @@ class RadioManager {
         p_HTTPSendRequest(request, callback: callback)
     }
     
-    private func p_fetchArtworkUrl(artist: String, callback: (String?, NSError?) -> Void) {
+    private func p_fetchArtworkUrl(artist: String, callback: (Result<String>) -> Void) {
         let urlString = Endpoint.Artwork(artist).urlString()
         
-        p_HTTPGet(urlString) { [weak self]
+        p_HTTPGet(urlString) {
             (data: NSData?, error: NSError?) -> Void in
-            guard let strongSelf = self else { return }
             
             if (error != nil) {
-                print("*** Error: \(error!.localizedDescription)")
-                callback(nil, error!)
+                callback(.Failure(.NetworkRequestError(error!.localizedDescription)))
             } else {
                 var imgUrlString: String?
                 
                 let json = JSON(data: data!)
-                let error = json["error"]
-                if (error != nil) {
-                    let jsonError: NSError?
+                if (json["error"] != nil) {
                     if let errorMessage = json["message"].string {
-                        jsonError = NSError(domain: strongSelf.kErrorDomain, code: -123, userInfo: [NSLocalizedDescriptionKey : errorMessage])
-                    } else {
-                        jsonError = NSError(domain: strongSelf.kErrorDomain, code: -123, userInfo: nil)
+                        callback(.Failure(.NetworkDataInconsistencyError(errorMessage)))
+                        return
                     }
-                    callback(nil, jsonError)
                 } else {
                     
                     if let imagesArray = json["artist"]["image"].arrayObject {
@@ -207,7 +219,11 @@ class RadioManager {
                         }
                     }
                     
-                    callback(imgUrlString, nil)
+                    if let imgUrlString = imgUrlString {
+                        callback(.Success(imgUrlString))
+                    } else {
+                        callback(.Failure(.FailedToObtainArtworkURL("Failed to obtain image URL string from JSON.")))
+                    }
                 }
             
             }
@@ -220,17 +236,17 @@ class RadioManager {
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
                 (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 if (error != nil) {
-                    callback(.Failure(.NetworkRequestError, error!.localizedDescription))
+                    callback(.Failure(.NetworkRequestError(error!.localizedDescription)))
                 } else {
                     if let imageData = data as NSData? {
                         let artwork = UIImage(data: imageData)
                         if let artwork = artwork {
                             callback(.Success(artwork))
                         } else {
-                            callback(.Failure(.DataTransformationError, "Failed to create artwork image from data."))
+                            callback(.Failure(.DataTransformationError("Failed to create artwork image from data.")))
                         }
                     } else {
-                        callback(.Failure(.NetworkDataInconsistencyError, "Failed to fetch artwork data from server."))
+                        callback(.Failure(.NetworkDataInconsistencyError("Failed to fetch artwork data from server.")))
                     }
                 }
             }

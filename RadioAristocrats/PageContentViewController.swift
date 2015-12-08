@@ -133,8 +133,8 @@ class PageContentViewController: UIViewController {
                                     case .Success(let image):
                                         songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
                                         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
-                                    case .Failure(_, let message):
-                                        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                                    case .Failure(let error):
+                                        let alert = UIAlertController(title: "Ошибка", message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                                         strongSelf.presentViewController(alert, animated: true, completion: nil)
                                     }
@@ -144,13 +144,13 @@ class PageContentViewController: UIViewController {
                         }
                     }
                     
-                case .Failure(let error, let message):
+                case .Failure(let error):
                     switch error {
                     case .FailedToObtainTrackInfo:
                         strongSelf.trackTitleLabel.text = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
-                        strongSelf.artistNameLabel.text = message
+                        strongSelf.artistNameLabel.text = error.toString()
                     default:
-                        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                        let alert = UIAlertController(title: "Ошибка", message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                         strongSelf.presentViewController(alert, animated: true, completion: nil)
                     }
