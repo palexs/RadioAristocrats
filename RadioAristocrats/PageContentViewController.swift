@@ -125,19 +125,22 @@ class PageContentViewController: UIViewController {
                             songInfo[MPMediaItemPropertyArtist] = artist
 
                             // Fetch and update artwork
-                            RadioManager.sharedInstance.fetchArtwork(artist, callback: {
-                                (image: UIImage?, error: NSError?) -> Void in
+                            RadioManager.sharedInstance.fetchArtwork(artist) {
+                                (result: Result<UIImage>) -> Void in
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    if (error != nil) {
-                                        print("*** Failed to fetch an artwork for \(track)! Details: \(error)")
+                                    
+                                    switch result {
+                                    case .Success(let image):
+                                        songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
+                                        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                                    case .Failure(_, let message):
+                                        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                                        strongSelf.presentViewController(alert, animated: true, completion: nil)
                                     }
-
-                                    if let img = image {
-                                        songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: img)
-                                    }
-                                    MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                                    
                                 })
-                            })
+                            }
                         }
                     }
                     
@@ -146,7 +149,7 @@ class PageContentViewController: UIViewController {
                     case .FailedToObtainTrackInfo:
                         strongSelf.trackTitleLabel.text = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
                         strongSelf.artistNameLabel.text = message
-                    case .NetworkRequestFailed, .XMLParserFailedToParseTrack, .XMLStringInitializationFailed:
+                    default:
                         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                         strongSelf.presentViewController(alert, animated: true, completion: nil)

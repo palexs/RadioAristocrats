@@ -23,11 +23,11 @@ enum MusicQuality: Int {
     case Edge = 1
 }
 
-enum RadioManagerError: ErrorType {
-    case NetworkRequestFailed
-    case XMLStringInitializationFailed
+enum RadioManagerError: ErrorType { // Consider using String
+    case NetworkRequestError
+    case NetworkDataInconsistencyError
+    case DataTransformationError
     case FailedToObtainTrackInfo
-    case XMLParserFailedToParseTrack
 }
 
 enum Result<T> {
@@ -111,17 +111,17 @@ class RadioManager {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
-                callback(.Failure(.NetworkRequestFailed, error!.localizedDescription))
+                callback(.Failure(.NetworkRequestError, error!.localizedDescription))
             } else {
                 guard let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) else {
-                    callback(.Failure(.XMLStringInitializationFailed, "Failed to initialize XML string with data."))
+                    callback(.Failure(.DataTransformationError, "Failed to initialize XML string with data."))
                     return
                 }
                 
                 let (track, message) = XMLParser.parse(xmlString as String, channel: channel)
                 
                 guard track != nil else {
-                    callback(.Failure(.XMLParserFailedToParseTrack, "Failed to parse XML and create Track object."))
+                    callback(.Failure(.DataTransformationError, "Failed to parse XML and create Track object."))
                     return
                 }
                 
@@ -138,13 +138,13 @@ class RadioManager {
         }
     }
     
-    func fetchArtwork(artist: String, callback: (UIImage?, NSError?) -> Void) {
+    func fetchArtwork(artist: String, callback: (Result<UIImage>) -> Void) {
         p_fetchArtworkUrl(artist) { [weak self]
             (artworkUrlString: String?, error: NSError?) -> Void in
             guard let strongSelf = self else { return }
             
             if (error != nil || artworkUrlString == nil) {
-                callback(nil, error)
+                callback(.Failure(.NetworkRequestError, error!.localizedDescription))
             } else {
                 strongSelf.p_imageFromUrl(artworkUrlString!, callback: callback)
             }
@@ -214,20 +214,23 @@ class RadioManager {
         }
     }
     
-    private func p_imageFromUrl(urlString: String, callback: (UIImage?, NSError?) -> Void) {
+    private func p_imageFromUrl(urlString: String, callback: (Result<UIImage>) -> Void) {
         if let url = NSURL(string: urlString) {
             let request = NSURLRequest(URL: url)
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
                 (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 if (error != nil) {
-                    callback(nil, error)
+                    callback(.Failure(.NetworkRequestError, error!.localizedDescription))
                 } else {
                     if let imageData = data as NSData? {
                         let artwork = UIImage(data: imageData)
-                        callback(artwork, nil)
+                        if let artwork = artwork {
+                            callback(.Success(artwork))
+                        } else {
+                            callback(.Failure(.DataTransformationError, "Failed to create artwork image from data."))
+                        }
                     } else {
-                        let err = NSError(domain: self.kErrorDomain, code: -122, userInfo: nil)
-                        callback(nil, err)
+                        callback(.Failure(.NetworkDataInconsistencyError, "Failed to fetch artwork data from server."))
                     }
                 }
             }
