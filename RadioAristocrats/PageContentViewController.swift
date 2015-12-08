@@ -94,12 +94,12 @@ class PageContentViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_setUkrainianLanguageIfThursday", name: UIApplicationSignificantTimeChangeNotification , object: nil)
-
+        
         RadioManager.sharedInstance.fetchTrack(channel!) {
-            (response: (track: Track?, message: String?), error: NSError?) -> Void in
+            (result: Result<Track>) -> Void in
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
-                
+
                 // Set default now playing info
                 let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
                 var songInfo: [String: AnyObject] = [
@@ -109,10 +109,9 @@ class PageContentViewController: UIViewController {
                     MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
                 ]
                 MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
-                
-                if let track = response.track {
-                    print("Track: \(track.artist) \(track.title)")
-                    
+
+                switch result {
+                case .Success(let track):
                     if let title = track.title {
                         if !title.isEmpty {
                             strongSelf.trackTitleLabel.text = title
@@ -124,7 +123,7 @@ class PageContentViewController: UIViewController {
                         if !artist.isEmpty {
                             strongSelf.artistNameLabel.text = artist
                             songInfo[MPMediaItemPropertyArtist] = artist
-                            
+
                             // Fetch and update artwork
                             RadioManager.sharedInstance.fetchArtwork(artist, callback: {
                                 (image: UIImage?, error: NSError?) -> Void in
@@ -132,7 +131,7 @@ class PageContentViewController: UIViewController {
                                     if (error != nil) {
                                         print("*** Failed to fetch an artwork for \(track)! Details: \(error)")
                                     }
-                                    
+
                                     if let img = image {
                                         songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: img)
                                     }
@@ -142,15 +141,17 @@ class PageContentViewController: UIViewController {
                         }
                     }
                     
-                }
-                
-                if let message = response.message {
-                    if !message.containsString(strongSelf.kAnnouncementDisplayOk) {
-                        print("*** Couldn't extract track information!")
-                        
+                case .Failure(let error, let message):
+                    switch error {
+                    case .FailedToObtainTrackInfo:
                         strongSelf.trackTitleLabel.text = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
                         strongSelf.artistNameLabel.text = message
+                    case .NetworkRequestFailed, .XMLParserFailedToParseTrack, .XMLStringInitializationFailed:
+                        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                        strongSelf.presentViewController(alert, animated: true, completion: nil)
                     }
+                    
                 }
             })
         }

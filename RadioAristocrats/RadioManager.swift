@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
+private let kAnnouncementDisplayOk = "Now On Air:"
+
 enum ChannelType: Int {
     case Stream = 0
     case AMusic = 1
@@ -19,6 +21,18 @@ enum ChannelType: Int {
 enum MusicQuality: Int {
     case Best = 0
     case Edge = 1
+}
+
+enum RadioManagerError: ErrorType {
+    case NetworkRequestFailed
+    case XMLStringInitializationFailed
+    case FailedToObtainTrackInfo
+    case XMLParserFailedToParseTrack
+}
+
+enum Result<T> {
+    case Success(T)
+    case Failure(RadioManagerError, String)
 }
 
 class RadioManager {
@@ -90,18 +104,36 @@ class RadioManager {
         return Endpoint.Music(channel, quality).urlString()
     }
     
-    func fetchTrack(channel: ChannelType, callback: ((track: Track?, message: String?), NSError?) -> Void) {
+    func fetchTrack(channel: ChannelType, callback: (Result<Track>) -> Void) {
         let urlString = Endpoint.XML(channel).urlString()
         
         p_HTTPGet(urlString) {
             (data: NSData?, error: NSError?) -> Void in
             if error != nil {
                 print("*** Error: \(error!.localizedDescription)")
-                callback((nil, nil), error)
+                callback(.Failure(.NetworkRequestFailed, error!.localizedDescription))
             } else {
-                let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) as! String
-                let (track, message) = XMLParser.parse(xmlString, channel: channel)
-                callback((track, message), nil)
+                guard let xmlString = NSString(data:data!, encoding:NSUTF8StringEncoding) else {
+                    callback(.Failure(.XMLStringInitializationFailed, "Failed to initialize XML string with data."))
+                    return
+                }
+                
+                let (track, message) = XMLParser.parse(xmlString as String, channel: channel)
+                
+                guard track != nil else {
+                    callback(.Failure(.XMLParserFailedToParseTrack, "Failed to parse XML and create Track object."))
+                    return
+                }
+                
+                if let message = message {
+                    if message.containsString(kAnnouncementDisplayOk) {
+                        callback(.Success(track!))
+                    } else {
+                        callback(.Failure(.FailedToObtainTrackInfo, message))
+                    }
+                } else {
+                    callback(.Success(track!))
+                }
             }
         }
     }
