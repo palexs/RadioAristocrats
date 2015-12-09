@@ -13,8 +13,6 @@ import MediaPlayer
 
 class PageContentViewController: UIViewController {
     
-    private let kAnnouncementDisplayOk = "Now On Air:"
-    
     private let kDefaultStreamColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
     private let kDefaultAMusicColor = UIColor(red: 0/255, green: 48/255, blue: 74/255, alpha: 1.0) // #00304A
     private let kDefaultJazzColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
