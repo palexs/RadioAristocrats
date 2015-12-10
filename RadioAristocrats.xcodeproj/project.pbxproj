@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8AB7D3A8BD2CB7EA45B35A85 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E51ADCE420A7FA5BA71516 /* Pods.framework */; };
+		FD005A4D1C19AF5F00C18C98 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD005A4C1C19AF5F00C18C98 /* PlayerManager.swift */; };
 		FD1BABAE1AB3312C00FAA022 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */; };
 		FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */; };
 		FD74E2DF1AA87A3400EFF16B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2DE1AA87A3400EFF16B /* ViewController.swift */; };
@@ -35,6 +36,7 @@
 		6CC34AB6C630DAB7DEEC0B45 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		74E51ADCE420A7FA5BA71516 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B03E895CFD8DBE4BC428AED /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		FD005A4C1C19AF5F00C18C98 /* PlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 		FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FD74E2D71AA87A3400EFF16B /* RadioAristocrats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RadioAristocrats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD74E2DB1AA87A3400EFF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */,
 				FD74E3001AA896DB00EFF16B /* Track.swift */,
 				FD74E3021AA898E800EFF16B /* RadioManager.swift */,
+				FD005A4C1C19AF5F00C18C98 /* PlayerManager.swift */,
 				FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */,
 				FD74E2E01AA87A3400EFF16B /* Main.storyboard */,
 				FD74E2E31AA87A3400EFF16B /* Images.xcassets */,
@@ -316,6 +319,7 @@
 				FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */,
 				FD74E2DF1AA87A3400EFF16B /* ViewController.swift in Sources */,
 				FD74E2DD1AA87A3400EFF16B /* AppDelegate.swift in Sources */,
+				FD005A4D1C19AF5F00C18C98 /* PlayerManager.swift in Sources */,
 				FD74E3011AA896DB00EFF16B /* Track.swift in Sources */,
 				FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */,
 				FD74E3051AA9A5DF00EFF16B /* XMLParser.swift in Sources */,

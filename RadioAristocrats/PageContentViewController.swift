@@ -7,9 +7,18 @@
 //
 
 import UIKit
-import AVFoundation
 import ReachabilitySwift
 import MediaPlayer
+
+struct State {
+    var channel: ChannelType
+    var quality: MusicQuality
+}
+
+protocol PageContentViewControllerDelegate {
+    func pageContentViewController(controller: PageContentViewController, didRecievePlayButtonTapWithState state: State)
+    func pageContentViewController(controller: PageContentViewController, didRecieveMusicQualitySwitchWithState state: State)
+}
 
 class PageContentViewController: UIViewController {
     
@@ -18,12 +27,10 @@ class PageContentViewController: UIViewController {
     private let kDefaultJazzColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
 
     private let kThursday = 5
-    
-    private var KVOContext: UInt8 = 1
-    private var player: AVPlayer?
-    private var channel: ChannelType?
+    private var _channel: ChannelType?
     
     var pageIndex: Int?
+    var delegate: PageContentViewControllerDelegate?
     
     private enum Strings: String {
         case UnknownTrack
@@ -74,7 +81,7 @@ class PageContentViewController: UIViewController {
     
     override func viewDidLoad() {
         if let aChannel = ChannelType(rawValue: pageIndex!) {
-            channel = aChannel
+            _channel = aChannel
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
@@ -83,17 +90,18 @@ class PageContentViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        p_setupInitialUIAndPlayer()
+        delegate = PlayerManager.sharedPlayer
+        
+        p_setupInitialUI()
         p_setDefaultColors()
         p_setUkrainianLanguageIfThursday()
         
-        player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_setUkrainianLanguageIfThursday", name: UIApplicationSignificantTimeChangeNotification , object: nil)
         
-        RadioManager.sharedInstance.fetchTrack(channel!) {
+        RadioManager.sharedInstance.fetchTrack(_channel!) {
             (result: Result<Track>) -> Void in
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
@@ -160,12 +168,11 @@ class PageContentViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        player?.pause()
-        player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
-        player = nil
+        
+        delegate = nil
         
         super.viewWillDisappear(animated)
     }
@@ -173,51 +180,24 @@ class PageContentViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func playButtonTouched(sender: UIButton?) {
-        print("Play button touched.")
-        
-        p_updatePlayButton()
-        
-        if (player?.rate == 0.0) {
-            player?.play()
-        } else {
-            player?.pause()
+        if let delegate = self.delegate {
+            let state = p_getCurrentUIState()
+            delegate.pageContentViewController(self, didRecievePlayButtonTapWithState: state)
         }
         
+        p_updatePlayButton()
     }
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
-        
-        if let index = MusicQuality(rawValue: sender.selectedSegmentIndex) {
-            
-            let wasPlaying = player?.rate != 0.0
-            
-            player?.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
-            p_setupPlayer(channel!, quality: index)
-            player?.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
-            
-            if (wasPlaying) {
-                player?.play()
-            }
-
-        } else {
-            assertionFailure("*** Invalid segmented control index!")
-        }
-    }
-    
-    // MARK: - KVO
-    
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if (context == &KVOContext) {
-//            var playerItem = object as! AVPlayerItem
-            
-        } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        if let delegate = self.delegate {
+            let state = p_getCurrentUIState()
+            delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
         }
     }
     
     // MARK: - Private methods
     
-    private func p_setupInitialUIAndPlayer() -> Void {
+    private func p_setupInitialUI() -> Void {
 
         p_updatePlayButton()
         
@@ -231,41 +211,58 @@ class PageContentViewController: UIViewController {
         
         if reachability!.isReachable() {
             if reachability!.isReachableViaWiFi() {
-                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
-                p_setupPlayer(channel!, quality: MusicQuality.Best)
-                print("Reachable via WiFi")
+                if (PlayerManager.sharedPlayer.quality != .Best) {
+                    musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
+                    if let delegate = self.delegate {
+                        let state = State(channel: _channel!, quality: .Best) // p_getCurrentUIState()
+                        delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
+                    }
+                    print("Reachable via WiFi")
+                }
             } else {
-                musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Edge.rawValue
-                p_setupPlayer(channel!, quality: MusicQuality.Edge)
-                print("Reachable via Cellular")
+                if (PlayerManager.sharedPlayer.quality != .Edge) {
+                    musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Edge.rawValue
+                    if let delegate = self.delegate {
+                        let state = State(channel: _channel!, quality: .Edge) // p_getCurrentUIState()
+                        delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
+                    }
+                    print("Reachable via Cellular")
+                }
             }
         } else {
             print("*** Not reachable!")
         }
     }
     
-    private func p_setupPlayer(channel: ChannelType, quality: MusicQuality) -> Void {
-        let url = NSURL(string: RadioManager.endpointUrlString(channel, quality: quality))
-        let playerItem = AVPlayerItem(URL: url!)
-        player = AVPlayer(playerItem: playerItem)
+    private func p_getCurrentUIState() -> State {
+        let quality = MusicQuality(rawValue: musicQuialitySegmentedControl.selectedSegmentIndex)
+        return State(channel: _channel!, quality: quality!)
     }
     
     private func p_updatePlayButton() {
         var image: UIImage?
         
-        if (player != nil && player?.rate == 0.0) {
-            switch channel! {
+        let state = p_getCurrentUIState()
+        let isPlayerPaused: Bool
+        if (state.channel == PlayerManager.sharedPlayer.channel) {
+            isPlayerPaused = PlayerManager.sharedPlayer.isPaused()
+        } else {
+            isPlayerPaused = true
+        }
+        
+        if (isPlayerPaused) {
+            switch _channel! {
                 case .Stream, .Jazz:
-                    image = UIImage(named: "pause")
+                    image = UIImage(named: "play")
                 case .AMusic:
-                    image = UIImage(named: "pause_a")
+                    image = UIImage(named: "play_a")
             }
         } else {
-            switch channel! {
+            switch _channel! {
             case .Stream, .Jazz:
-                image = UIImage(named: "play")
+                image = UIImage(named: "pause")
             case .AMusic:
-                image = UIImage(named: "play_a")
+                image = UIImage(named: "pause_a")
             }
         }
         
@@ -273,7 +270,7 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_setDefaultColors() {
-        switch channel! {
+        switch _channel! {
             case .Stream:
                 musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
             case .AMusic:
