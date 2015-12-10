@@ -10,6 +10,8 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
+let ViewControllerRemotePlayPauseCommandReceivedNotification = "RemotePlayPauseCommandReceivedNotification"
+
 class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
 //    private var KVOContext: UInt8 = 1
@@ -87,7 +89,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
     // MARK: - PageContentViewController Delegate
     
-    func pageContentViewController(controller: PageContentViewController, didRecievePlayButtonTapWithState state: State) {
+    func pageContentViewController(controller: PageContentViewController, didRecievePlayButtonTapWithState state: State) -> Void {
         if (state.channel == PlayerManager.sharedPlayer.channel) {
             if (PlayerManager.sharedPlayer.isPaused()) {
                 PlayerManager.sharedPlayer.play()
@@ -100,7 +102,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
     }
     
-    func pageContentViewController(controller: PageContentViewController, didRecieveMusicQualitySwitchWithState state: State)
+    func pageContentViewController(controller: PageContentViewController, didRecieveMusicQualitySwitchWithState state: State) -> Void
     {
         if (state.channel == PlayerManager.sharedPlayer.channel) {
             if (!PlayerManager.sharedPlayer.isPaused()) {
@@ -114,12 +116,14 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     // MARK: - Remote Command Center handlers
     
     func remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayCommandReceivedNotification, object: self)
+        play()
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
         return .Success
     }
     
     func remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePauseCommandReceivedNotification, object: self)
+        pause()
+        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
         return .Success
     }
     

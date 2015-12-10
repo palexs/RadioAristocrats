@@ -8,9 +8,6 @@
 
 import UIKit
 
-let ViewControllerRemotePlayCommandReceivedNotification = "RemotePlayCommandReceivedNotification"
-let ViewControllerRemotePauseCommandReceivedNotification = "RemotePauseCommandReceivedNotification"
-
 class ViewController: UIViewController, UIPageViewControllerDataSource {
 
     private struct ContentViewControllers {

@@ -96,10 +96,8 @@ class PageContentViewController: UIViewController {
         p_setDefaultColors()
         p_setUkrainianLanguageIfThursday()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playButtonTouched:", name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_setUkrainianLanguageIfThursday", name: UIApplicationSignificantTimeChangeNotification , object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationHandler:", name: UIApplicationSignificantTimeChangeNotification , object: nil)
         
         RadioManager.sharedInstance.fetchTrack(_channel!) {
             (result: Result<Track>) -> Void in
@@ -169,8 +167,7 @@ class PageContentViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayCommandReceivedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
         
         delegate = nil
         
@@ -192,6 +189,18 @@ class PageContentViewController: UIViewController {
         if let delegate = self.delegate {
             let state = p_getCurrentUIState()
             delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
+        }
+    }
+    
+    // MARK: - Notification Handler
+    
+    func notificationHandler(notification: NSNotification) -> Void {
+        if (notification.name == ViewControllerRemotePlayPauseCommandReceivedNotification) {
+            p_updatePlayButton()
+        } else if (notification.name == UIApplicationSignificantTimeChangeNotification) {
+            p_setUkrainianLanguageIfThursday()
+        } else {
+            print("*** Received unknown notification!")
         }
     }
     
@@ -239,7 +248,7 @@ class PageContentViewController: UIViewController {
         return State(channel: _channel!, quality: quality!)
     }
     
-    private func p_updatePlayButton() {
+    private func p_updatePlayButton() -> Void {
         var image: UIImage?
         
         let state = p_getCurrentUIState()
@@ -269,7 +278,7 @@ class PageContentViewController: UIViewController {
         playButton.setImage(image, forState: .Normal)
     }
     
-    private func p_setDefaultColors() {
+    private func p_setDefaultColors() -> Void {
         switch _channel! {
             case .Stream:
                 musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
