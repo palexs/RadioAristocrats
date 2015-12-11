@@ -98,8 +98,8 @@ class PageContentViewController: UIViewController {
         p_setDefaultColors()
         p_setUkrainianLanguageIfThursday()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationHandler:", name: UIApplicationSignificantTimeChangeNotification , object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification , object: nil)
         
         p_fetchTrack()
         
@@ -138,7 +138,7 @@ class PageContentViewController: UIViewController {
     
     // MARK: - Notification Handler
     
-    func notificationHandler(notification: NSNotification) -> Void {
+    func p_notificationHandler(notification: NSNotification) -> Void {
         if (notification.name == ViewControllerRemotePlayPauseCommandReceivedNotification) {
             p_updatePlayButton()
         } else if (notification.name == UIApplicationSignificantTimeChangeNotification) {

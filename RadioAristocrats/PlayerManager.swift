@@ -43,8 +43,8 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
         
         // Setup Remote Command Center
-        MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "remotePlayCommandReceived")
-        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.addTarget(self, action: "remotePauseCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "p_remotePlayCommandReceived")
+        MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.addTarget(self, action: "p_remotePauseCommandReceived")
         MPRemoteCommandCenter.sharedCommandCenter().playCommand.enabled = true
         MPRemoteCommandCenter.sharedCommandCenter().pauseCommand.enabled = true
         MPRemoteCommandCenter.sharedCommandCenter().previousTrackCommand.enabled = false
@@ -115,13 +115,13 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
     // MARK: - Remote Command Center handlers
     
-    func remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
+    func p_remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
         play()
         NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
         return .Success
     }
     
-    func remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
+    func p_remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
         pause()
         NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
         return .Success
