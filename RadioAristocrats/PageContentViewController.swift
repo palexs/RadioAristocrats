@@ -45,29 +45,29 @@ class PageContentViewController: UIViewController {
         func localizedText(let isThursday: Bool) -> String {
             if (isThursday) { // Ukrainian
                 switch self {
-                    case .UnknownTrack:
-                        return "Невідомий трек"
-                    case .UnknownArtist:
-                        return "Невідомий виконавець"
-                    case .NoTrackInfoErrorMessage:
-                        return "Упс, щось пішло шкереберть!"
-                    case .MusicQualityBest:
-                        return "Найкраща"
-                    case .Quality:
-                        return "Якість"
+                case .UnknownTrack:
+                    return "Невідомий трек"
+                case .UnknownArtist:
+                    return "Невідомий виконавець"
+                case .NoTrackInfoErrorMessage:
+                    return "Упс, щось пішло шкереберть!"
+                case .MusicQualityBest:
+                    return "Найкраща"
+                case .Quality:
+                    return "Якість"
                 }
             } else { // Russian
                 switch self {
-                    case .UnknownTrack:
-                        return "Неизвестный трек"
-                    case .UnknownArtist:
-                        return "Неизвестный исполнитель"
-                    case .NoTrackInfoErrorMessage:
-                        return "Упс, что-то пошло не так!"
-                    case .MusicQualityBest:
-                        return "Лучшее"
-                    case .Quality:
-                        return "Качество"
+                case .UnknownTrack:
+                    return "Неизвестный трек"
+                case .UnknownArtist:
+                    return "Неизвестный исполнитель"
+                case .NoTrackInfoErrorMessage:
+                    return "Упс, что-то пошло не так!"
+                case .MusicQualityBest:
+                    return "Лучшее"
+                case .Quality:
+                    return "Качество"
                 }
             }
         }
@@ -229,6 +229,7 @@ class PageContentViewController: UIViewController {
     private func p_setupInitialUI() -> Void {
 
         p_updatePlayButton()
+        p_setDefaultLogo()
         
         let reachability: Reachability?
         do {
@@ -300,12 +301,23 @@ class PageContentViewController: UIViewController {
     
     private func p_setDefaultColors() -> Void {
         switch _channel! {
-            case .Stream:
-                musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
-            case .AMusic:
-                musicQuialitySegmentedControl.tintColor = kDefaultAMusicColor
-            case .Jazz:
-                musicQuialitySegmentedControl.tintColor = kDefaultJazzColor
+        case .Stream:
+            musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
+        case .AMusic:
+            musicQuialitySegmentedControl.tintColor = kDefaultAMusicColor
+        case .Jazz:
+            musicQuialitySegmentedControl.tintColor = kDefaultJazzColor
+        }
+    }
+    
+    private func p_setDefaultLogo() -> Void {
+        switch (_channel!) {
+        case .Stream:
+            logoImageView.image = UIImage(named: "logo_ru")
+        case .AMusic:
+            logoImageView.image = UIImage(named: "logo_a_music")
+        case .Jazz:
+            logoImageView.image = UIImage(named: "logo_a_jazz")
         }
     }
     
@@ -320,10 +332,9 @@ class PageContentViewController: UIViewController {
     
     private func p_setUkrainianLanguageIfThursday() -> Void {
         let isThursday = p_isTodayThursday()
-        if (p_isTodayThursday()) {
+        p_setDefaultLogo()
+        if (isThursday && _channel! == .Stream) {
             logoImageView.image = UIImage(named: "logo_ua")
-        } else {
-            logoImageView.image = UIImage(named: "logo_ru")
         }
         
         musicQualityLabel.text = Strings.Quality.localizedText(isThursday)
