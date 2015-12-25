@@ -231,6 +231,11 @@ class PageContentViewController: UIViewController {
         p_updatePlayButton()
         p_setDefaultLogo()
         
+        if (_channel! == .Jazz) {
+            // Jazz channel has only Best quality
+            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
+        }
+        
         let reachability: Reachability?
         do {
             reachability = try Reachability.reachabilityForInternetConnection()
