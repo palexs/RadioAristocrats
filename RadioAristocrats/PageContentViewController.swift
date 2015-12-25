@@ -96,12 +96,12 @@ class PageContentViewController: UIViewController {
         
         p_setupInitialUI()
         p_setDefaultColors()
+        p_setDefaultPlayingInfo()
         p_setUkrainianLanguageIfThursday()
+        p_fetchTrack()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification , object: nil)
-        
-        p_fetchTrack()
         
         timer = NSTimer.scheduledTimerWithTimeInterval(kUpdateInterval, target:self, selector: "p_timerFired", userInfo: nil, repeats: true)
     }
@@ -156,15 +156,7 @@ class PageContentViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
                 
-                // Set default now playing info
-                let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
-                var songInfo: [String: AnyObject] = [
-                    MPMediaItemPropertyTitle: Strings.UnknownTrack.localizedText(strongSelf.p_isTodayThursday()),
-                    MPMediaItemPropertyArtist: Strings.UnknownArtist.localizedText(strongSelf.p_isTodayThursday()),
-                    MPMediaItemPropertyArtwork: defaultAlbumArtWork,
-                    MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
-                ]
-                MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                var songInfo: [String: AnyObject] = Dictionary()
                 
                 switch result {
                 case .Success(let track):
@@ -190,6 +182,7 @@ class PageContentViewController: UIViewController {
                                         songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
                                         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
                                     case .Failure(let error):
+                                        strongSelf.p_setDefaultPlayingInfo()
                                         let alert = UIAlertController(title: "Ошибка", message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                                         strongSelf.presentViewController(alert, animated: true, completion: nil)
@@ -322,5 +315,16 @@ class PageContentViewController: UIViewController {
     
     func p_timerFired() -> Void {
         p_fetchTrack()
+    }
+    
+    func p_setDefaultPlayingInfo() -> Void {
+        let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
+        let songInfo: [String: AnyObject] = [
+            MPMediaItemPropertyTitle: Strings.UnknownTrack.localizedText(p_isTodayThursday()),
+            MPMediaItemPropertyArtist: Strings.UnknownArtist.localizedText(p_isTodayThursday()),
+            MPMediaItemPropertyArtwork: defaultAlbumArtWork,
+            MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
+        ]
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
     }
 }
