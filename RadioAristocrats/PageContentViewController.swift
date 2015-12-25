@@ -23,9 +23,9 @@ protocol PageContentViewControllerDelegate {
 
 class PageContentViewController: UIViewController {
     
-    private let kDefaultStreamColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
+    private let kDefaultStreamColor = UIColor(red: 169/255, green: 29/255, blue: 65/255, alpha: 1.0) // #A91D41
     private let kDefaultAMusicColor = UIColor(red: 0/255, green: 48/255, blue: 74/255, alpha: 1.0) // #00304A
-    private let kDefaultJazzColor = UIColor(red: 212/255, green: 68/255, blue: 79/255, alpha: 1.0) // #D4444F
+    private let kDefaultJazzColor = UIColor(red: 169/255, green: 29/255, blue: 65/255, alpha: 1.0) // #A91D41
 
     private let kThursday = 5
     private let kUpdateInterval: NSTimeInterval = 5
