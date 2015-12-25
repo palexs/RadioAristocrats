@@ -9,6 +9,7 @@
 import UIKit
 import ReachabilitySwift
 import MediaPlayer
+import AutoScrollLabel
 
 struct State {
     var channel: ChannelType
@@ -73,8 +74,8 @@ class PageContentViewController: UIViewController {
     }
 
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var trackTitleLabel: UILabel!
-    @IBOutlet weak var artistNameLabel: UILabel!
+    @IBOutlet weak var trackTitleLabel: CBAutoScrollLabel!
+    @IBOutlet weak var artistNameLabel: CBAutoScrollLabel!
     @IBOutlet weak var musicQuialitySegmentedControl: UISegmentedControl!
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var musicQualityLabel: UILabel!
@@ -87,6 +88,22 @@ class PageContentViewController: UIViewController {
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
+        
+        trackTitleLabel.text = "Неизвестный трек"
+        trackTitleLabel.textAlignment = NSTextAlignment.Center
+        trackTitleLabel.labelSpacing = 30
+        trackTitleLabel.pauseInterval = 2.0
+        trackTitleLabel.scrollSpeed = 30.0
+        trackTitleLabel.textColor = UIColor.blackColor()
+        trackTitleLabel.scrollDirection = CBAutoScrollDirection.Left
+        
+        artistNameLabel.text = "Неизвестный исполнитель"
+        artistNameLabel.textAlignment = NSTextAlignment.Center
+        artistNameLabel.labelSpacing = 30
+        artistNameLabel.pauseInterval = 2.0
+        artistNameLabel.scrollSpeed = 30.0
+        artistNameLabel.textColor = UIColor.blackColor()
+        artistNameLabel.scrollDirection = CBAutoScrollDirection.Left
     }
     
     override func viewWillAppear(animated: Bool) {
