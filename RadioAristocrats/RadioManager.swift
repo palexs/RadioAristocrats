@@ -70,33 +70,33 @@ class RadioManager {
             switch self {
             case .XML(let channel):
                 switch channel {
-                    case .Stream:
-                        return "\(kXMLBaseUrl)/service/NowOnAir.xml"
-                    case .AMusic:
-                        return "\(kXMLBaseUrl)/service/nowplaying-amusic.xml"
-                    case .Jazz:
-                        return "\(kXMLBaseUrl)/service/nowplaying-ajazz.xml"
+                case .Stream:
+                    return "\(kXMLBaseUrl)/service/NowOnAir.xml"
+                case .AMusic:
+                    return "\(kXMLBaseUrl)/service/nowplaying-amusic.xml"
+                case .Jazz:
+                    return "\(kXMLBaseUrl)/service/nowplaying-ajazz.xml"
                 }
 
             case .Music(let channel, let quality):
                 switch quality {
                     case .Best:
                         switch channel {
-                            case .Stream:
-                                return "\(kMusicBaseUrl)/live2"
-                            case .AMusic:
-                                return "\(kMusicBaseUrl)/amusic-128"
-                            case .Jazz:
-                                return "\(kMusicBaseUrl)/ajazz"
+                        case .Stream:
+                            return "\(kMusicBaseUrl)/live2"
+                        case .AMusic:
+                            return "\(kMusicBaseUrl)/amusic-128"
+                        case .Jazz:
+                            return "\(kMusicBaseUrl)/ajazz"
                         }
                     case .Edge:
                         switch channel {
-                            case .Stream:
-                                return "\(kMusicBaseUrl)/live2-64"
-                            case .AMusic:
-                                return "\(kMusicBaseUrl)/amusic-64"
-                            case .Jazz:
-                                return "\(kMusicBaseUrl)/ajazz"
+                        case .Stream:
+                            return "\(kMusicBaseUrl)/live2-64"
+                        case .AMusic:
+                            return "\(kMusicBaseUrl)/amusic-64"
+                        case .Jazz:
+                            return "\(kMusicBaseUrl)/ajazz"
                         }
                     
                 }
