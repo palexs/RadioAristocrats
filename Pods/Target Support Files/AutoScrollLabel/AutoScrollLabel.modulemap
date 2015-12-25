@@ -1,0 +1,6 @@
+framework module AutoScrollLabel {
+  umbrella header "AutoScrollLabel-umbrella.h"
+
+  export *
+  module * { export * }
+}
