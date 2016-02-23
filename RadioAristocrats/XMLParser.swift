@@ -17,11 +17,7 @@ class XMLParser {
         var artist: String?
         
         switch channel {
-            case .Stream:
-                title = xml["Schedule"]["Event"]["Song"].element?.attributes["title"]
-                artist = xml["Schedule"]["Event"]["Song"]["Artist"].element?.attributes["name"]
-            
-            case .AMusic, .Jazz:
+            case .Stream, .AMusic, .Jazz:
                 title = xml["Playlist"]["song"].element?.attributes["title"]
                 artist = xml["Playlist"]["artist"].element?.attributes["title"]
         }
