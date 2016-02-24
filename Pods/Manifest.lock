@@ -1,7 +1,7 @@
 PODS:
   - AutoScrollLabel (0.4.3)
-  - ReachabilitySwift (2.3)
-  - SwiftyJSON (2.3.1)
+  - ReachabilitySwift (2.3.3)
+  - SwiftyJSON (2.3.2)
   - SWXMLHash (2.0.2)
 
 DEPENDENCIES:
@@ -18,16 +18,16 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ReachabilitySwift:
-    :commit: 4788551ca34ce6f6c4d4cd29fcb0959df779510c
+    :commit: cf126c0584a209143c75bf1d0f23fd904891e26e
     :git: https://github.com/ashleymills/Reachability.swift
   SwiftyJSON:
-    :commit: a4cce2ec0bf31bfec2cf4cc7f1030a59a7bc95d2
+    :commit: 42bdb102d2624b143c07850ebdc1537d5b6579b6
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
   AutoScrollLabel: bee53a1d4532569b49cbecaf9b80ca003bed3767
-  ReachabilitySwift: 2ac9df18a443901f06caae38a9f5431219a4c36a
-  SwiftyJSON: 592b53bee5ef3dd9b3bebc6b9cb7ee35426ae8c3
+  ReachabilitySwift: e0f6b6f280effb47731acfaaa2d5ffe223703793
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   SWXMLHash: 9e6bd7db2e8275eaf3d2082265623d6e749e169d
 
 COCOAPODS: 0.39.0
