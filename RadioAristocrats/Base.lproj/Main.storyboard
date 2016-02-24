@@ -48,13 +48,18 @@
                                 <rect key="frame" x="0.0" y="65" width="600" height="135"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_ru" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-5B-TaV">
-                                        <rect key="frame" x="100" y="30" width="400" height="75"/>
+                                        <rect key="frame" x="175" y="44.5" width="250" height="46.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="zQo-5B-TaV" secondAttribute="height" multiplier="16:3" id="4BT-3k-MfH"/>
+                                            <constraint firstAttribute="width" secondItem="zQo-5B-TaV" secondAttribute="height" multiplier="16:3" id="5zO-vm-0ej"/>
+                                            <constraint firstAttribute="width" constant="250" id="Uye-DA-jq1"/>
+                                            <constraint firstAttribute="height" constant="75" id="eTk-wR-HhJ"/>
                                             <constraint firstAttribute="width" secondItem="zQo-5B-TaV" secondAttribute="height" multiplier="16:3" id="u89-hl-Hqx"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="4BT-3k-MfH"/>
+                                                <exclude reference="eTk-wR-HhJ"/>
                                                 <exclude reference="u89-hl-Hqx"/>
                                             </mask>
                                         </variation>
@@ -66,6 +71,12 @@
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zQo-5B-TaV" secondAttribute="trailing" constant="1" id="eFx-c3-G2c"/>
                                     <constraint firstItem="zQo-5B-TaV" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MoH-Ye-8a4" secondAttribute="leading" constant="1" id="oMK-eU-BZi"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="eFx-c3-G2c"/>
+                                        <exclude reference="oMK-eU-BZi"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zqj-5s-SPg">
                                 <rect key="frame" x="230" y="230" width="140" height="140"/>
