@@ -216,10 +216,14 @@ class PageContentViewController: UIViewController {
         p_updatePlayButton()
         p_setDefaultLogo()
         
-        if (_channel! == .Jazz) {
+        let shouldQualityControllBeHidden: Bool = _channel! == .Jazz
+        musicQuialitySegmentedControl.hidden = shouldQualityControllBeHidden
+        musicQualityLabel.hidden = shouldQualityControllBeHidden
+        
+//        if (_channel! == .Jazz) {
             // Jazz channel has only Best quality
-            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
-        }
+//            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
+//        }
         
         let reachability: Reachability?
         do {
