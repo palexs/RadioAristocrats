@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -26,7 +27,7 @@
         <!--Page View Controller-->
         <scene sceneID="ZwP-eD-M2h">
             <objects>
-                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="TyF-dr-ULB" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="PageViewController" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="TyF-dr-ULB" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h90-wR-Yhf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1143" y="40"/>
@@ -48,12 +49,22 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_ru" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-5B-TaV">
                                         <rect key="frame" x="100" y="30" width="400" height="75"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="zQo-5B-TaV" secondAttribute="height" multiplier="16:3" id="4BT-3k-MfH"/>
+                                            <constraint firstAttribute="width" secondItem="zQo-5B-TaV" secondAttribute="height" multiplier="16:3" id="u89-hl-Hqx"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="u89-hl-Hqx"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="zQo-5B-TaV" firstAttribute="centerX" secondItem="MoH-Ye-8a4" secondAttribute="centerX" id="XY4-ue-31m"/>
                                     <constraint firstItem="zQo-5B-TaV" firstAttribute="centerY" secondItem="MoH-Ye-8a4" secondAttribute="centerY" id="a37-Yw-JqY"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zQo-5B-TaV" secondAttribute="trailing" constant="1" id="eFx-c3-G2c"/>
+                                    <constraint firstItem="zQo-5B-TaV" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MoH-Ye-8a4" secondAttribute="leading" constant="1" id="oMK-eU-BZi"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zqj-5s-SPg">
@@ -147,10 +158,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="HMr-UF-A1B" secondAttribute="bottom" constant="15" id="5rI-Tw-qR3"/>
+                            <constraint firstItem="MoH-Ye-8a4" firstAttribute="top" secondItem="Ey8-ec-BH2" secondAttribute="top" constant="65" id="8Z2-ma-Paa"/>
                             <constraint firstAttribute="centerY" secondItem="zqj-5s-SPg" secondAttribute="centerY" id="CAb-ci-LiB"/>
                             <constraint firstItem="HMr-UF-A1B" firstAttribute="leading" secondItem="Ey8-ec-BH2" secondAttribute="leading" id="DoZ-oV-7ob"/>
-                            <constraint firstItem="nQi-Ss-4Bj" firstAttribute="top" secondItem="HMr-UF-A1B" secondAttribute="bottom" constant="15" id="GqH-gj-NAJ"/>
-                            <constraint firstItem="MoH-Ye-8a4" firstAttribute="top" secondItem="HwD-lL-yqr" secondAttribute="bottom" constant="45" id="KBk-YY-jQX"/>
                             <constraint firstItem="MoH-Ye-8a4" firstAttribute="leading" secondItem="Ey8-ec-BH2" secondAttribute="leading" id="VPv-Uh-0te"/>
                             <constraint firstAttribute="trailing" secondItem="MoH-Ye-8a4" secondAttribute="trailing" id="iGe-2C-nXr"/>
                             <constraint firstAttribute="trailing" secondItem="HMr-UF-A1B" secondAttribute="trailing" id="lfm-oK-HbK"/>

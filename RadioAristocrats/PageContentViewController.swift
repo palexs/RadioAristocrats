@@ -88,22 +88,6 @@ class PageContentViewController: UIViewController {
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
-        
-        trackTitleLabel.text = "Неизвестный трек"
-        trackTitleLabel.textAlignment = NSTextAlignment.Center
-        trackTitleLabel.labelSpacing = 30
-        trackTitleLabel.pauseInterval = 2.0
-        trackTitleLabel.scrollSpeed = 30.0
-        trackTitleLabel.textColor = UIColor.blackColor()
-        trackTitleLabel.scrollDirection = CBAutoScrollDirection.Left
-        
-        artistNameLabel.text = "Неизвестный исполнитель"
-        artistNameLabel.textAlignment = NSTextAlignment.Center
-        artistNameLabel.labelSpacing = 30
-        artistNameLabel.pauseInterval = 2.0
-        artistNameLabel.scrollSpeed = 30.0
-        artistNameLabel.textColor = UIColor.blackColor()
-        artistNameLabel.scrollDirection = CBAutoScrollDirection.Left
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -111,6 +95,8 @@ class PageContentViewController: UIViewController {
         
         delegate = PlayerManager.sharedPlayer
         
+        p_setupAutoScrollLabel(trackTitleLabel)
+        p_setupAutoScrollLabel(artistNameLabel)
         p_setupInitialUI()
         p_setDefaultColors()
         p_setDefaultPlayingInfo()
@@ -118,13 +104,12 @@ class PageContentViewController: UIViewController {
         p_fetchTrack()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification , object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification, object: nil)
         
         timer = NSTimer.scheduledTimerWithTimeInterval(kUpdateInterval, target:self, selector: "p_timerFired", userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(animated: Bool) {
-        
         timer.invalidate()
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
@@ -359,5 +344,15 @@ class PageContentViewController: UIViewController {
             MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
         ]
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+    }
+    
+    func p_setupAutoScrollLabel(label: CBAutoScrollLabel) -> Void {
+        label.text = "Неизвестный трек"
+        label.textAlignment = NSTextAlignment.Center
+        label.labelSpacing = 30
+        label.pauseInterval = 2.0
+        label.scrollSpeed = 30.0
+        label.textColor = UIColor.blackColor()
+        label.scrollDirection = CBAutoScrollDirection.Left
     }
 }

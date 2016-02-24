@@ -26,19 +26,17 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         _pageViewController.dataSource = self
         let startingViewController: PageContentViewController = viewControllerAtIndex(0) as! PageContentViewController
         _pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
-        startingViewController.delegate = PlayerManager.sharedPlayer
         _pageViewController.view.frame = CGRectMake(0, 0, view.bounds.width, view.bounds.height)
-        startingViewController.willMoveToParentViewController(_pageViewController)
+        _pageViewController.willMoveToParentViewController(self)
         addChildViewController(_pageViewController)
-        view.addSubview(_pageViewController.view)
         _pageViewController.didMoveToParentViewController(self)
+        view.addSubview(_pageViewController.view)
         
-        // Setup PageControl
+        // Setup PageControl appearance
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
         pageControl.currentPageIndicatorTintColor = UIColor.darkGrayColor()
         pageControl.backgroundColor = UIColor.clearColor()
-        
     }
 
     // MARK: - UIPageViewController DataSource
@@ -63,7 +61,6 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         index--
         
         return viewControllerAtIndex(index)
-        
     }
     
     func viewControllerAtIndex(index : Int) -> UIViewController? {
@@ -72,7 +69,6 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         }
         
         let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as! PageContentViewController
-        
         pageContentViewController.pageIndex = index
         
         return pageContentViewController
