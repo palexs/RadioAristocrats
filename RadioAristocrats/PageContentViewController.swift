@@ -50,7 +50,7 @@ class PageContentViewController: UIViewController {
                 case .UnknownArtist:
                     return "Невідомий виконавець"
                 case .NoTrackInfoErrorMessage:
-                    return "Упс, щось пішло шкереберть!"
+                    return "Йой, щось пішло шкереберть!"
                 case .MusicQualityBest:
                     return "Найкраща"
                 case .Quality:
@@ -351,7 +351,7 @@ class PageContentViewController: UIViewController {
     }
     
     func p_setupAutoScrollLabel(label: CBAutoScrollLabel) -> Void {
-        label.text = "Неизвестный трек"
+        label.text = "--"
         label.textAlignment = NSTextAlignment.Center
         label.labelSpacing = 30
         label.pauseInterval = 2.0

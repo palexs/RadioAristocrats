@@ -6,11 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "aristocrats_launch_screen.png",
+      "filename" : "launch_screen_2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "launch_screen_3x.png",
       "scale" : "3x"
     }
   ],
