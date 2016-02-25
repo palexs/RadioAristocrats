@@ -95,8 +95,11 @@ class PageContentViewController: UIViewController {
         
         delegate = PlayerManager.sharedPlayer
         
-        p_setupAutoScrollLabel(trackTitleLabel)
-        p_setupAutoScrollLabel(artistNameLabel)
+        var font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
+        p_setupAutoScrollLabel(trackTitleLabel, font: font)
+        font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        p_setupAutoScrollLabel(artistNameLabel, font: font)
+        
         p_setupInitialUI()
         p_setDefaultColors()
         p_setDefaultPlayingInfo()
@@ -350,8 +353,10 @@ class PageContentViewController: UIViewController {
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
     }
     
-    func p_setupAutoScrollLabel(label: CBAutoScrollLabel) -> Void {
+    func p_setupAutoScrollLabel(label: CBAutoScrollLabel, font: UIFont) -> Void {
+        // Headline - UIFontTextStyleHeadline, Subheadline - UIFontTextStyleSubheadline
         label.text = "--"
+        label.font = font
         label.textAlignment = NSTextAlignment.Center
         label.labelSpacing = 30
         label.pauseInterval = 2.0
