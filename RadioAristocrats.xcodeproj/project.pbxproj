@@ -209,7 +209,7 @@
 				TargetAttributes = {
 					FD74E2D61AA87A3400EFF16B = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = VESU9R73S8;
+						DevelopmentTeam = 44U47KTSE6;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -456,7 +456,7 @@
 				INFOPLIST_FILE = RadioAristocrats/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "fm.aristocrats.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -472,7 +472,7 @@
 				INFOPLIST_FILE = RadioAristocrats/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "fm.aristocrats.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
