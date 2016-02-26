@@ -236,7 +236,13 @@ class RadioManager {
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
                 (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 if (error != nil) {
-                    callback(.Failure(.NetworkRequestError(error!.localizedDescription)))
+                    // Can't fetch artwork, use the default one
+                    let artwork = UIImage(named: "default_artwork")
+                    if let artwork = artwork {
+                        callback(.Success(artwork))
+                    } else {
+                        callback(.Failure(.DataTransformationError("Failed to create artwork image from data.")))
+                    }
                 } else {
                     if let imageData = data as NSData? {
                         let artwork = UIImage(data: imageData)
