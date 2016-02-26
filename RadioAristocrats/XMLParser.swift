@@ -23,7 +23,7 @@ class XMLParser {
         }
         
         let message = xml["Schedule"]["Event"]["Announcement"].element?.attributes["Display"]
-        let track = Track(title:title!, artist:artist!)
+        let track = Track(title:title, artist:artist)
         return (track, message)
     }
     
