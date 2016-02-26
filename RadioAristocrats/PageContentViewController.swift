@@ -111,7 +111,7 @@ class PageContentViewController: UIViewController {
         p_setUkrainianLanguageIfThursday()
         p_fetchTrack()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: kViewControllerRemotePlayPauseCommandNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification, object: nil)
         
         timer = NSTimer.scheduledTimerWithTimeInterval(kUpdateInterval, target:self, selector: "p_timerFired", userInfo: nil, repeats: true)
@@ -121,7 +121,7 @@ class PageContentViewController: UIViewController {
         timer.invalidate()
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ViewControllerRemotePlayPauseCommandReceivedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: kViewControllerRemotePlayPauseCommandNotification, object: nil)
         
         delegate = nil
         
@@ -149,7 +149,7 @@ class PageContentViewController: UIViewController {
     // MARK: - Notification Handler
     
     func p_notificationHandler(notification: NSNotification) -> Void {
-        if (notification.name == ViewControllerRemotePlayPauseCommandReceivedNotification) {
+        if (notification.name == kViewControllerRemotePlayPauseCommandNotification) {
             p_updatePlayButton()
         } else if (notification.name == UIApplicationSignificantTimeChangeNotification) {
             p_setUkrainianLanguageIfThursday()

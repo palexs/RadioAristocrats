@@ -22,10 +22,17 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
         super.viewDidLoad()
         
         // Setup PageViewController
-        _pageViewController = storyboard?.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
+        if let pageVC = storyboard?.instantiateViewControllerWithIdentifier("PageViewController") as? UIPageViewController {
+            _pageViewController = pageVC
+        } else {
+            print("*** Type casting error.")
+        }
         _pageViewController.dataSource = self
-        let startingViewController: PageContentViewController = viewControllerAtIndex(0) as! PageContentViewController
-        _pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
+        if let startingViewController: PageContentViewController = viewControllerAtIndex(0) as? PageContentViewController {
+            _pageViewController.setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
+        } else {
+            print("*** Type casting error.")
+        }
         _pageViewController.view.frame = CGRectMake(0, 0, view.bounds.width, view.bounds.height)
         _pageViewController.willMoveToParentViewController(self)
         addChildViewController(_pageViewController)
@@ -43,35 +50,47 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
         
-        var index = (viewController as! PageContentViewController).pageIndex!
-        index++
-        if (index >= ContentViewControllers.Count) {
+        if let viewController = viewController as? PageContentViewController {
+            var index = viewController.pageIndex!
+            index++
+            if (index >= ContentViewControllers.Count) {
+                return nil
+            }
+            return viewControllerAtIndex(index)
+        } else {
+            print("*** Type casting error.")
             return nil
         }
-        
-        return viewControllerAtIndex(index)
+
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
         
-        var index = (viewController as! PageContentViewController).pageIndex!
-        if (index <= 0) {
+        if let viewController = viewController as? PageContentViewController {
+            var index = viewController.pageIndex!
+            if (index <= 0) {
+                return nil
+            }
+            index--
+            return viewControllerAtIndex(index)
+        } else {
+            print("*** Type casting error.")
             return nil
         }
-        index--
-        
-        return viewControllerAtIndex(index)
     }
     
-    func viewControllerAtIndex(index : Int) -> UIViewController? {
+    func viewControllerAtIndex(index: Int) -> UIViewController? {
         if (index >= ContentViewControllers.Count) {
             return nil
         }
         
-        let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as! PageContentViewController
-        pageContentViewController.pageIndex = index
-        
-        return pageContentViewController
+        if let pageContentViewController = storyboard?.instantiateViewControllerWithIdentifier("PageContentViewController") as? PageContentViewController {
+            pageContentViewController.pageIndex = index
+            return pageContentViewController
+        } else {
+            print("*** Type casting error.")
+            return nil
+        }
     }
     
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
@@ -83,4 +102,3 @@ class ViewController: UIViewController, UIPageViewControllerDataSource {
     }
     
 }
-

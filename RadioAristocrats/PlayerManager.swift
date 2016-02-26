@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
-let ViewControllerRemotePlayPauseCommandReceivedNotification = "RemotePlayPauseCommandReceivedNotification"
+let kViewControllerRemotePlayPauseCommandNotification = "RemotePlayPauseCommandReceivedNotification"
 
 class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
@@ -102,8 +102,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
     }
     
-    func pageContentViewController(controller: PageContentViewController, didRecieveMusicQualitySwitchWithState state: State) -> Void
-    {
+    func pageContentViewController(controller: PageContentViewController, didRecieveMusicQualitySwitchWithState state: State) -> Void {
         if (state.channel == PlayerManager.sharedPlayer.channel) {
             if (!PlayerManager.sharedPlayer.isPaused()) {
                 PlayerManager.sharedPlayer.updatePlayerForState(state)
@@ -117,13 +116,13 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
     func p_remotePlayCommandReceived() -> MPRemoteCommandHandlerStatus {
         play()
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(kViewControllerRemotePlayPauseCommandNotification, object: self)
         return .Success
     }
     
     func p_remotePauseCommandReceived() -> MPRemoteCommandHandlerStatus {
         pause()
-        NSNotificationCenter.defaultCenter().postNotificationName(ViewControllerRemotePlayPauseCommandReceivedNotification, object: self)
+        NSNotificationCenter.defaultCenter().postNotificationName(kViewControllerRemotePlayPauseCommandNotification, object: self)
         return .Success
     }
     

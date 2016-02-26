@@ -211,10 +211,13 @@ class RadioManager {
                     
                     if let imagesArray = json["artist"]["image"].arrayObject {
                         for imgDict in imagesArray {
-                            let dict = imgDict as! [String : String]
-                            if (dict["size"] == "extralarge") {
-                                imgUrlString = dict["#text"]
-                                break
+                            if let dict = imgDict as? [String : String] {
+                                if (dict["size"] == "extralarge") {
+                                    imgUrlString = dict["#text"]
+                                    break
+                                }
+                            } else {
+                                print("*** Type casting error.")
                             }
                         }
                     }

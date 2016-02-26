@@ -12,7 +12,7 @@ class Track {
    var title: String?
    var artist: String?
     
-    init(title aTitle: String?, artist anArtist: String?) {        
+    init(title aTitle: String?, artist anArtist: String?) {
         title = aTitle ?? "--"
         artist = anArtist ?? "--"
     }
