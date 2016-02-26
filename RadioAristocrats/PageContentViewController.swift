@@ -41,6 +41,7 @@ class PageContentViewController: UIViewController {
         case NoTrackInfoErrorMessage
         case MusicQualityBest
         case Quality
+        case Error
         
         func localizedText(let isThursday: Bool) -> String {
             if (isThursday) { // Ukrainian
@@ -55,6 +56,8 @@ class PageContentViewController: UIViewController {
                     return "Найкраща"
                 case .Quality:
                     return "Якість"
+                case .Error:
+                    return "Помилка"
                 }
             } else { // Russian
                 switch self {
@@ -68,6 +71,8 @@ class PageContentViewController: UIViewController {
                     return "Лучшее"
                 case .Quality:
                     return "Качество"
+                case .Error:
+                    return "Ошибка"
                 }
             }
         }
@@ -188,7 +193,8 @@ class PageContentViewController: UIViewController {
                                         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
                                     case .Failure(let error):
                                         strongSelf.p_setDefaultPlayingInfo()
-                                        let alert = UIAlertController(title: "Ошибка", message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
+                                        let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
+                                        let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                                         strongSelf.presentViewController(alert, animated: true, completion: nil)
                                     }
@@ -204,7 +210,8 @@ class PageContentViewController: UIViewController {
                         strongSelf.trackTitleLabel.text = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
                         strongSelf.artistNameLabel.text = error.toString()
                     default:
-                        let alert = UIAlertController(title: "Ошибка", message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
+                        let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
+                        let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
                         strongSelf.presentViewController(alert, animated: true, completion: nil)
                     }
