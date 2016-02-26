@@ -236,6 +236,7 @@ class RadioManager {
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
                 (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 if (error != nil) {
+                    print("*** Error: \(error!.localizedDescription)")
                     // Can't fetch artwork, use the default one
                     let artwork = UIImage(named: "default_artwork")
                     if let artwork = artwork {
