@@ -235,6 +235,10 @@ class PageContentViewController: UIViewController {
 //            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
 //        }
         
+        p_setMusicQualityWithRespectToReachability()
+    }
+    
+    private func p_setMusicQualityWithRespectToReachability() -> Void {
         let reachability: Reachability?
         do {
             reachability = try Reachability.reachabilityForInternetConnection()
