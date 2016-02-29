@@ -11,6 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 let kViewControllerRemotePlayPauseCommandNotification = "RemotePlayPauseCommandReceivedNotification"
+let kViewControllerUpdatePlayButtonNotification = "UpdatePlayButtonNotification"
 
 class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
@@ -41,6 +42,8 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         } catch let error as NSError {
             print(error.localizedDescription)
         }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_handleAudioSessionInterruption:", name: AVAudioSessionInterruptionNotification, object: nil)
         
         // Setup Remote Command Center
         MPRemoteCommandCenter.sharedCommandCenter().playCommand.addTarget(self, action: "p_remotePlayCommandReceived")
@@ -124,6 +127,25 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         pause()
         NSNotificationCenter.defaultCenter().postNotificationName(kViewControllerRemotePlayPauseCommandNotification, object: self)
         return .Success
+    }
+    
+    // MARK: - Notification Handlers
+    
+    func p_handleAudioSessionInterruption(notification: NSNotification) -> Void {
+        guard let typeKey = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            else { return }
+        guard let type = AVAudioSessionInterruptionType(rawValue: typeKey)
+            else { return }
+        
+        switch type {
+        case .Began:
+            print("AVAudioSession interruption began.")
+        case .Ended:
+//            _ = try? AVAudioSession.sharedInstance().setActive(true, withOptions: [])
+//            _player.play()
+            print("AVAudioSession interruption ended.")
+            NSNotificationCenter.defaultCenter().postNotificationName(kViewControllerUpdatePlayButtonNotification, object: nil)
+        }
     }
     
     // MARK: - KVO

@@ -113,6 +113,7 @@ class PageContentViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: kViewControllerRemotePlayPauseCommandNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_updatePlayButtonNotificationHandler:", name: kViewControllerUpdatePlayButtonNotification, object: nil)
         
         timer = NSTimer.scheduledTimerWithTimeInterval(kUpdateInterval, target:self, selector: "p_timerFired", userInfo: nil, repeats: true)
     }
@@ -122,6 +123,7 @@ class PageContentViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationSignificantTimeChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: kViewControllerRemotePlayPauseCommandNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: kViewControllerUpdatePlayButtonNotification, object: nil)
         
         delegate = nil
         
@@ -146,7 +148,7 @@ class PageContentViewController: UIViewController {
         }
     }
     
-    // MARK: - Notification Handler
+    // MARK: - Notification Handlers
     
     func p_notificationHandler(notification: NSNotification) -> Void {
         if (notification.name == kViewControllerRemotePlayPauseCommandNotification) {
@@ -156,6 +158,10 @@ class PageContentViewController: UIViewController {
         } else {
             print("*** Received unknown notification!")
         }
+    }
+    
+    func p_updatePlayButtonNotificationHandler(notification: NSNotification) -> Void {
+        p_updatePlayButton()
     }
     
     // MARK: - Private methods
