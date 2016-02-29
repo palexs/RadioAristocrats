@@ -164,7 +164,12 @@ class RadioManager {
             case .Success(let artworkUrlString):
                 strongSelf.p_imageFromUrl(artworkUrlString, callback: callback)
             case .Failure(let error):
-                callback(.Failure(error))
+                switch error {
+                case .FailedToObtainArtworkURL(_):
+                    strongSelf.p_imageFromUrl("", callback: callback) // will use default artwork
+                default:
+                    callback(.Failure(error))
+                }
             }
             
         }
@@ -204,7 +209,7 @@ class RadioManager {
                 let json = JSON(data: data!)
                 if (json["error"] != nil) {
                     if let errorMessage = json["message"].string {
-                        callback(.Failure(.NetworkDataInconsistencyError(errorMessage)))
+                        callback(.Failure(.FailedToObtainArtworkURL(errorMessage)))
                         return
                     }
                 } else {
@@ -239,7 +244,7 @@ class RadioManager {
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
                 (response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 if (error != nil) {
-                    print("*** Error: \(error!.localizedDescription)")
+                    print("*** Error: \(error!.localizedDescription). Will use default_artwork image.")
                     // Can't fetch artwork, use the default one
                     let artwork = UIImage(named: "default_artwork")
                     if let artwork = artwork {
