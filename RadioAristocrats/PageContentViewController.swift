@@ -32,6 +32,12 @@ class PageContentViewController: UIViewController {
     private let kUpdateInterval: NSTimeInterval = 5
     private var _channel: ChannelType?
     private var timer = NSTimer()
+    private var currentTrack: Track = Track(title: kTrackEmptyString, artist: kTrackEmptyString) {
+        willSet (newTrack) {
+            p_updateUIForTrack(newTrack)
+        }
+    }
+    private var currentArtwork: UIImage = UIImage(named: "default_artwork")!
     
     var pageIndex: Int?
     var delegate: PageContentViewControllerDelegate?
@@ -108,7 +114,6 @@ class PageContentViewController: UIViewController {
         
         p_setupInitialUI()
         p_setDefaultColors()
-        p_setDefaultPlayingInfo()
         p_setUkrainianLanguageIfThursday()
         p_fetchTrack()
         
@@ -140,6 +145,7 @@ class PageContentViewController: UIViewController {
         }
         
         p_updatePlayButton()
+        p_updateSongInfo()
     }
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
@@ -173,15 +179,9 @@ class PageContentViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
                 
-                var songInfo: [String: AnyObject] = Dictionary()
-                
                 switch result {
                 case .Success(let track):
-                    strongSelf.trackTitleLabel.text = track.title
-                    songInfo[MPMediaItemPropertyTitle] = track.title
-                    
-                    strongSelf.artistNameLabel.text = track.artist
-                    songInfo[MPMediaItemPropertyArtist] = track.artist
+                    strongSelf.currentTrack = track
                     
                     // Fetch and update artwork
                     RadioManager.sharedInstance.fetchArtwork(track.artist) {
@@ -190,10 +190,8 @@ class PageContentViewController: UIViewController {
                             
                             switch result {
                             case .Success(let image):
-                                songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-                                MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                                strongSelf.currentArtwork = image
                             case .Failure(let error):
-                                strongSelf.p_setDefaultPlayingInfo()
                                 let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
                                 let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
                                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
@@ -206,18 +204,42 @@ class PageContentViewController: UIViewController {
                 case .Failure(let error):
                     switch error {
                     case .FailedToObtainTrackInfo:
-                        strongSelf.trackTitleLabel.text = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
-                        strongSelf.artistNameLabel.text = error.toString()
+                        let unknownTitle = Strings.UnknownTrack.localizedText(strongSelf.p_isTodayThursday())
+                        let unknownArtist = Strings.UnknownArtist.localizedText(strongSelf.p_isTodayThursday())
+                        let unknownTrack = Track(title: unknownTitle, artist: unknownArtist)
+                        strongSelf.currentTrack = unknownTrack
                     default:
-                        let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
-                        let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                        strongSelf.presentViewController(alert, animated: true, completion: nil)
+                        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
+                        let errorArtist = error.toString()
+                        let errorTrack = Track(title: errorTitle, artist: errorArtist)
+                        strongSelf.currentTrack = errorTrack
                     }
                     
                 }
             })
         }
+    }
+    
+    private func p_updateUIForTrack(track: Track) -> Void {
+        if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
+            trackTitleLabel.textColor = kDefaultOnAirColor
+            trackTitleLabel.text = Strings.OnAir.localizedText(p_isTodayThursday())
+            artistNameLabel.text = kTrackEmptyString
+        } else {
+            trackTitleLabel.textColor = UIColor.blackColor()
+            trackTitleLabel.text = track.title
+            artistNameLabel.text = track.artist
+        }
+    }
+    
+    private func p_updateSongInfo() -> Void {
+        let songInfo: [String: AnyObject] = [
+            MPMediaItemPropertyTitle: self.currentTrack.title,
+            MPMediaItemPropertyArtist: self.currentTrack.artist,
+            MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.currentArtwork),
+            MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
+        ]
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
     }
     
     private func p_setupInitialUI() -> Void {
@@ -359,21 +381,10 @@ class PageContentViewController: UIViewController {
     func p_timerFired() -> Void {
         p_fetchTrack()
     }
-    
-    func p_setDefaultPlayingInfo() -> Void {
-        let defaultAlbumArtWork = MPMediaItemArtwork(image: UIImage(named: "default_artwork")!)
-        let songInfo: [String: AnyObject] = [
-            MPMediaItemPropertyTitle: Strings.UnknownTrack.localizedText(p_isTodayThursday()),
-            MPMediaItemPropertyArtist: Strings.UnknownArtist.localizedText(p_isTodayThursday()),
-            MPMediaItemPropertyArtwork: defaultAlbumArtWork,
-            MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
-        ]
-        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
-    }
-    
+        
     func p_setupAutoScrollLabel(label: CBAutoScrollLabel, font: UIFont) -> Void {
         // Headline - UIFontTextStyleHeadline, Subheadline - UIFontTextStyleSubheadline
-        label.text = "--"
+        label.text = kTrackEmptyString
         label.font = font
         label.textAlignment = NSTextAlignment.Center
         label.labelSpacing = 30
