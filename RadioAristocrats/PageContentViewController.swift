@@ -30,11 +30,12 @@ class PageContentViewController: UIViewController {
 
     private let kThursday = 5
     private let kUpdateInterval: NSTimeInterval = 5
-    private var _channel: ChannelType?
+    private var channel: ChannelType?
     private var timer = NSTimer()
     private var currentTrack: Track = Track(title: kTrackEmptyString, artist: kTrackEmptyString) {
         willSet (newTrack) {
             p_updateUIForTrack(newTrack)
+            p_updateSongInfo()
         }
     }
     private var currentArtwork: UIImage = UIImage(named: "default_artwork")!
@@ -101,7 +102,7 @@ class PageContentViewController: UIViewController {
     
     override func viewDidLoad() {
         if let aChannel = ChannelType(rawValue: pageIndex!) {
-            _channel = aChannel
+            channel = aChannel
         } else {
             assertionFailure("*** Failed to set channel type!")
         }
@@ -145,7 +146,6 @@ class PageContentViewController: UIViewController {
         }
         
         p_updatePlayButton()
-        p_updateSongInfo()
     }
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
@@ -174,7 +174,7 @@ class PageContentViewController: UIViewController {
     // MARK: - Private methods
     
     private func p_fetchTrack() -> Void {
-        RadioManager.sharedInstance.fetchTrack(_channel!) {
+        RadioManager.sharedInstance.fetchTrack(channel!) {
             (result: Result<Track>) -> Void in
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let strongSelf = self else { return }
@@ -233,6 +233,11 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_updateSongInfo() -> Void {
+        
+        if (PlayerManager.sharedPlayer.channel != channel) {
+            return
+        }
+        
         let songInfo: [String: AnyObject] = [
             MPMediaItemPropertyTitle: self.currentTrack.title,
             MPMediaItemPropertyArtist: self.currentTrack.artist,
@@ -248,7 +253,7 @@ class PageContentViewController: UIViewController {
         p_updatePlayButton()
         p_setDefaultLogo()
         
-        let shouldQualityControllBeHidden: Bool = _channel! == .Jazz
+        let shouldQualityControllBeHidden: Bool = channel! == .Jazz
         musicQuialitySegmentedControl.hidden = shouldQualityControllBeHidden
         musicQualityLabel.hidden = shouldQualityControllBeHidden
         
@@ -281,7 +286,7 @@ class PageContentViewController: UIViewController {
                 if (PlayerManager.sharedPlayer.quality != .Best) {
                     musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
                     if let delegate = self.delegate {
-                        let state = State(channel: _channel!, quality: .Best) // p_getCurrentUIState()
+                        let state = State(channel: channel!, quality: .Best) // p_getCurrentUIState()
                         delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
                     }
                     print("Reachable via WiFi")
@@ -290,7 +295,7 @@ class PageContentViewController: UIViewController {
                 if (PlayerManager.sharedPlayer.quality != .Edge) {
                     musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Edge.rawValue
                     if let delegate = self.delegate {
-                        let state = State(channel: _channel!, quality: .Edge) // p_getCurrentUIState()
+                        let state = State(channel: channel!, quality: .Edge) // p_getCurrentUIState()
                         delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
                     }
                     print("Reachable via Cellular")
@@ -303,7 +308,7 @@ class PageContentViewController: UIViewController {
     
     private func p_getCurrentUIState() -> State {
         let quality = MusicQuality(rawValue: musicQuialitySegmentedControl.selectedSegmentIndex)
-        return State(channel: _channel!, quality: quality!)
+        return State(channel: channel!, quality: quality!)
     }
     
     private func p_updatePlayButton() -> Void {
@@ -318,14 +323,14 @@ class PageContentViewController: UIViewController {
         }
         
         if (isPlayerPaused) {
-            switch _channel! {
+            switch channel! {
                 case .Stream, .Jazz:
                     image = UIImage(named: "play")
                 case .AMusic:
                     image = UIImage(named: "play_a")
             }
         } else {
-            switch _channel! {
+            switch channel! {
             case .Stream, .Jazz:
                 image = UIImage(named: "pause")
             case .AMusic:
@@ -337,7 +342,7 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_setDefaultColors() -> Void {
-        switch _channel! {
+        switch channel! {
         case .Stream:
             musicQuialitySegmentedControl.tintColor = kDefaultStreamColor
         case .AMusic:
@@ -348,7 +353,7 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_setDefaultLogo() -> Void {
-        switch (_channel!) {
+        switch (channel!) {
         case .Stream:
             logoImageView.image = UIImage(named: "logo_ru")
         case .AMusic:
@@ -370,7 +375,7 @@ class PageContentViewController: UIViewController {
     private func p_setUkrainianLanguageIfThursday() -> Void {
         let isThursday = p_isTodayThursday()
         p_setDefaultLogo()
-        if (isThursday && _channel! == .Stream) {
+        if (isThursday && channel! == .Stream) {
             logoImageView.image = UIImage(named: "logo_ua")
         }
         
