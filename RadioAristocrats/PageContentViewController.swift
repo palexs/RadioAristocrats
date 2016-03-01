@@ -106,11 +106,6 @@ class PageContentViewController: UIViewController {
         
         delegate = PlayerManager.sharedPlayer
         
-        var font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
-        p_setupAutoScrollLabel(trackTitleLabel, font: font)
-        font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
-        p_setupAutoScrollLabel(artistNameLabel, font: font)
-        
         p_setupInitialUI()
         p_setDefaultColors()
         p_setDefaultPlayingInfo()
@@ -227,6 +222,7 @@ class PageContentViewController: UIViewController {
     
     private func p_setupInitialUI() -> Void {
 
+        p_setupInitialTrackLabels()
         p_updatePlayButton()
         p_setDefaultLogo()
         
@@ -240,6 +236,13 @@ class PageContentViewController: UIViewController {
 //        }
         
         p_setMusicQualityWithRespectToReachability()
+    }
+    
+    private func p_setupInitialTrackLabels() -> Void {
+        var font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
+        p_setupAutoScrollLabel(trackTitleLabel, font: font)
+        font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        p_setupAutoScrollLabel(artistNameLabel, font: font)
     }
     
     private func p_setMusicQualityWithRespectToReachability() -> Void {
