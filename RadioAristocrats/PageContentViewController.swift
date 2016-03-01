@@ -26,6 +26,7 @@ class PageContentViewController: UIViewController {
     private let kDefaultStreamColor = UIColor(red: 169/255, green: 29/255, blue: 65/255, alpha: 1.0) // #A91D41
     private let kDefaultAMusicColor = UIColor(red: 0/255, green: 48/255, blue: 74/255, alpha: 1.0) // #00304A
     private let kDefaultJazzColor = UIColor(red: 169/255, green: 29/255, blue: 65/255, alpha: 1.0) // #A91D41
+    private let kDefaultOnAirColor = UIColor(red: 158/255, green: 158/255, blue: 158/255, alpha: 1.0) // #9E9E9E
 
     private let kThursday = 5
     private let kUpdateInterval: NSTimeInterval = 5
@@ -36,6 +37,7 @@ class PageContentViewController: UIViewController {
     var delegate: PageContentViewControllerDelegate?
     
     private enum Strings: String {
+        case OnAir
         case UnknownTrack
         case UnknownArtist
         case NoTrackInfoErrorMessage
@@ -46,6 +48,8 @@ class PageContentViewController: UIViewController {
         func localizedText(let isThursday: Bool) -> String {
             if (isThursday) { // Ukrainian
                 switch self {
+                case .OnAir:
+                    return "Прямий ефір"
                 case .UnknownTrack:
                     return "Невідомий трек"
                 case .UnknownArtist:
@@ -61,6 +65,8 @@ class PageContentViewController: UIViewController {
                 }
             } else { // Russian
                 switch self {
+                case .OnAir:
+                    return "Прямой эфир"
                 case .UnknownTrack:
                     return "Неизвестный трек"
                 case .UnknownArtist:
@@ -176,38 +182,30 @@ class PageContentViewController: UIViewController {
                 
                 switch result {
                 case .Success(let track):
-                    if let title = track.title {
-                        if !title.isEmpty {
-                            strongSelf.trackTitleLabel.text = title
-                            songInfo[MPMediaItemPropertyTitle] = title
-                        }
-                    }
+                    strongSelf.trackTitleLabel.text = track.title
+                    songInfo[MPMediaItemPropertyTitle] = track.title
                     
-                    if let artist = track.artist {
-                        if !artist.isEmpty {
-                            strongSelf.artistNameLabel.text = artist
-                            songInfo[MPMediaItemPropertyArtist] = artist
+                    strongSelf.artistNameLabel.text = track.artist
+                    songInfo[MPMediaItemPropertyArtist] = track.artist
+                    
+                    // Fetch and update artwork
+                    RadioManager.sharedInstance.fetchArtwork(track.artist) {
+                        (result: Result<UIImage>) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            // Fetch and update artwork
-                            RadioManager.sharedInstance.fetchArtwork(artist) {
-                                (result: Result<UIImage>) -> Void in
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    
-                                    switch result {
-                                    case .Success(let image):
-                                        songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-                                        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
-                                    case .Failure(let error):
-                                        strongSelf.p_setDefaultPlayingInfo()
-                                        let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
-                                        let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
-                                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                                        strongSelf.presentViewController(alert, animated: true, completion: nil)
-                                    }
-                                    
-                                })
+                            switch result {
+                            case .Success(let image):
+                                songInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
+                                MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+                            case .Failure(let error):
+                                strongSelf.p_setDefaultPlayingInfo()
+                                let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
+                                let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                                strongSelf.presentViewController(alert, animated: true, completion: nil)
                             }
-                        }
+                            
+                        })
                     }
                     
                 case .Failure(let error):

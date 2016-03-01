@@ -8,12 +8,19 @@
 
 import Foundation
 
-class Track {
-   var title: String?
-   var artist: String?
+let kTrackEmptyString = " "
+
+class Track: Equatable {
+   var title: String
+   var artist: String
     
     init(title aTitle: String?, artist anArtist: String?) {
-        title = aTitle ?? "--"
-        artist = anArtist ?? "--"
+        title = aTitle ?? kTrackEmptyString
+        artist = anArtist ?? kTrackEmptyString
     }
+
+}
+
+func ==(lhs: Track, rhs: Track) -> Bool {
+    return lhs.title == rhs.title && lhs.artist == rhs.artist
 }
