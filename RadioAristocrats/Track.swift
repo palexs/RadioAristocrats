@@ -8,7 +8,7 @@
 
 import Foundation
 
-let kTrackEmptyString = " "
+let kTrackEmptyString = "--"
 
 class Track: Equatable {
    var title: String
@@ -17,6 +17,14 @@ class Track: Equatable {
     init(title aTitle: String?, artist anArtist: String?) {
         title = aTitle ?? kTrackEmptyString
         artist = anArtist ?? kTrackEmptyString
+        
+        if (title.isEmpty) {
+            title = kTrackEmptyString
+        }
+        
+        if (artist.isEmpty) {
+            artist = kTrackEmptyString
+        }
     }
 
 }
