@@ -15,7 +15,7 @@ let kViewControllerUpdatePlayButtonNotification = "UpdatePlayButtonNotification"
 
 class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
-//    private var KVOContext: UInt8 = 1
+//    private var kKVOContext: UInt8 = 1
     private var _player: AVPlayer
     private var _channel: ChannelType
     private var _quality: MusicQuality
@@ -27,8 +27,8 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         let url = NSURL(string: RadioManager.endpointUrlString(_channel, quality: _quality))
         let playerItem = AVPlayerItem(URL: url!)
         _player = AVPlayer(playerItem: playerItem)
-        
         super.init()
+//        _player.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &kKVOContext)
         
         // Setup background playback
         do {
@@ -69,11 +69,11 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     }
     
     func updatePlayerForState(state: State) -> Void {
+//        _player.currentItem!.removeObserver(self, forKeyPath: "status", context: &kKVOContext)
         let url = NSURL(string: RadioManager.endpointUrlString(state.channel, quality: state.quality))
         let playerItem = AVPlayerItem(URL: url!)
-//            _player.currentItem!.removeObserver(self, forKeyPath: "status", context: &KVOContext)
-//            _player.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &KVOContext)
         _player.replaceCurrentItemWithPlayerItem(playerItem)
+//        _player.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &kKVOContext)
         _channel = state.channel
         _quality = state.quality
     }
@@ -88,6 +88,10 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     
     func isPaused() -> Bool {
         return _player.rate == 0.0
+    }
+    
+    func updateSongInfo() -> Void {
+        p_fetchTrackAndArtwork()
     }
     
     // MARK: - PageContentViewController Delegate
@@ -148,10 +152,70 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
     }
     
+    private func p_updateSongInfoWithTrack(track: Track, artwork: UIImage?) -> Void {
+        var artworkImage: UIImage
+        if let artwork = artwork {
+            artworkImage = artwork
+        } else {
+            artworkImage = UIImage(named: "default_artwork")!
+        }
+        
+        if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
+            track.title = Strings.OnAir.localizedText(Strings.isTodayThursday())
+            track.artist = " "
+        }
+        
+        let songInfo: [String: AnyObject] = [
+            MPMediaItemPropertyTitle: track.title,
+            MPMediaItemPropertyArtist: track.artist,
+            MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: artworkImage),
+            MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
+        ]
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
+    }
+    
+    private func p_updateSongInfoWithError(error: RadioManagerError) -> Void {
+        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(Strings.isTodayThursday())
+        let errorArtist = error.toString()
+        let errorTrack = Track(title: errorTitle, artist: errorArtist)
+        self.p_updateSongInfoWithTrack(errorTrack, artwork:nil)
+    }
+    
+    private func p_fetchTrackAndArtwork() -> Void {
+        RadioManager.sharedInstance.fetchTrack(_channel) {
+            (result: Result<Track>) -> Void in
+                switch result {
+                case .Success(let track):
+                    // Fetch and update artwork
+                    RadioManager.sharedInstance.fetchArtwork(track.artist) { [unowned self]
+                        (result: Result<UIImage>) -> Void in
+                            switch result {
+                            case .Success(let image):
+                                self.p_updateSongInfoWithTrack(track, artwork:image)
+                            case .Failure(let error):
+                                self.p_updateSongInfoWithError(error)
+                            }
+                        
+                    }
+                case .Failure(let error):
+                    switch error {
+                    case .FailedToObtainTrackInfo:
+                        let unknownTitle = Strings.UnknownTrack.localizedText(Strings.isTodayThursday())
+                        let unknownArtist = Strings.UnknownArtist.localizedText(Strings.isTodayThursday())
+                        let unknownTrack = Track(title: unknownTitle, artist: unknownArtist)
+                        self.p_updateSongInfoWithTrack(unknownTrack, artwork:nil)
+                    default:
+                        self.p_updateSongInfoWithError(error)
+                    }
+
+                }
+            }
+    }
+    
     // MARK: - KVO
     
 //    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-//        if (context == &KVOContext) {
+//        if (context == &kKVOContext) {
 //            //            var playerItem = object as! AVPlayerItem
 //        } else {
 //            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)

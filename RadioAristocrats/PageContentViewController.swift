@@ -28,68 +28,12 @@ class PageContentViewController: UIViewController {
     private let kDefaultJazzColor = UIColor(red: 169/255, green: 29/255, blue: 65/255, alpha: 1.0) // #A91D41
     private let kDefaultOnAirColor = UIColor(red: 158/255, green: 158/255, blue: 158/255, alpha: 1.0) // #9E9E9E
 
-    private let kThursday = 5
-    private let kUpdateInterval: NSTimeInterval = 5
+    private let kUpdateInterval: NSTimeInterval = 3
     private var channel: ChannelType?
     private var timer = NSTimer()
-    private var currentTrack: Track = Track(title: kTrackEmptyString, artist: kTrackEmptyString) {
-        willSet (newTrack) {
-            p_updateUIForTrack(newTrack)
-            p_updateSongInfo()
-        }
-    }
-    private var currentArtwork: UIImage = UIImage(named: "default_artwork")!
     
     var pageIndex: Int?
     var delegate: PageContentViewControllerDelegate?
-    
-    private enum Strings: String {
-        case OnAir
-        case UnknownTrack
-        case UnknownArtist
-        case NoTrackInfoErrorMessage
-        case MusicQualityBest
-        case Quality
-        case Error
-        
-        func localizedText(let isThursday: Bool) -> String {
-            if (isThursday) { // Ukrainian
-                switch self {
-                case .OnAir:
-                    return "Прямий ефір"
-                case .UnknownTrack:
-                    return "Невідомий трек"
-                case .UnknownArtist:
-                    return "Невідомий виконавець"
-                case .NoTrackInfoErrorMessage:
-                    return "Йой, щось пішло шкереберть!"
-                case .MusicQualityBest:
-                    return "Найкраща"
-                case .Quality:
-                    return "Якість"
-                case .Error:
-                    return "Помилка"
-                }
-            } else { // Russian
-                switch self {
-                case .OnAir:
-                    return "Прямой эфир"
-                case .UnknownTrack:
-                    return "Неизвестный трек"
-                case .UnknownArtist:
-                    return "Неизвестный исполнитель"
-                case .NoTrackInfoErrorMessage:
-                    return "Упс, что-то пошло не так!"
-                case .MusicQualityBest:
-                    return "Лучшее"
-                case .Quality:
-                    return "Качество"
-                case .Error:
-                    return "Ошибка"
-                }
-            }
-        }
-    }
 
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var trackTitleLabel: CBAutoScrollLabel!
@@ -181,41 +125,22 @@ class PageContentViewController: UIViewController {
                 
                 switch result {
                 case .Success(let track):
-                    strongSelf.currentTrack = track
-                    
-                    // Fetch and update artwork
-                    RadioManager.sharedInstance.fetchArtwork(track.artist) {
-                        (result: Result<UIImage>) -> Void in
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            switch result {
-                            case .Success(let image):
-                                strongSelf.currentArtwork = image
-                            case .Failure(let error):
-                                let alertTitle = Strings.Error.localizedText(strongSelf.p_isTodayThursday())
-                                let alert = UIAlertController(title: alertTitle, message: error.toString(), preferredStyle: UIAlertControllerStyle.Alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                                strongSelf.presentViewController(alert, animated: true, completion: nil)
-                            }
-                            
-                        })
-                    }
-                    
+                    strongSelf.p_updateUIForTrack(track)
                 case .Failure(let error):
                     switch error {
                     case .FailedToObtainTrackInfo:
-                        let unknownTitle = Strings.UnknownTrack.localizedText(strongSelf.p_isTodayThursday())
-                        let unknownArtist = Strings.UnknownArtist.localizedText(strongSelf.p_isTodayThursday())
+                        let unknownTitle = Strings.UnknownTrack.localizedText(Strings.isTodayThursday())
+                        let unknownArtist = Strings.UnknownArtist.localizedText(Strings.isTodayThursday())
                         let unknownTrack = Track(title: unknownTitle, artist: unknownArtist)
-                        strongSelf.currentTrack = unknownTrack
+                        strongSelf.p_updateUIForTrack(unknownTrack)
                     default:
-                        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(strongSelf.p_isTodayThursday())
+                        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(Strings.isTodayThursday())
                         let errorArtist = error.toString()
                         let errorTrack = Track(title: errorTitle, artist: errorArtist)
-                        strongSelf.currentTrack = errorTrack
+                        strongSelf.p_updateUIForTrack(errorTrack)
                     }
-                    
                 }
+                
             })
         }
     }
@@ -223,28 +148,13 @@ class PageContentViewController: UIViewController {
     private func p_updateUIForTrack(track: Track) -> Void {
         if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
             trackTitleLabel.textColor = kDefaultOnAirColor
-            trackTitleLabel.text = Strings.OnAir.localizedText(p_isTodayThursday())
-            artistNameLabel.text = kTrackEmptyString
+            trackTitleLabel.text = Strings.OnAir.localizedText(Strings.isTodayThursday())
+            artistNameLabel.text = " "
         } else {
             trackTitleLabel.textColor = UIColor.blackColor()
             trackTitleLabel.text = track.title
             artistNameLabel.text = track.artist
         }
-    }
-    
-    private func p_updateSongInfo() -> Void {
-        
-        if (PlayerManager.sharedPlayer.channel != channel) {
-            return
-        }
-        
-        let songInfo: [String: AnyObject] = [
-            MPMediaItemPropertyTitle: self.currentTrack.title,
-            MPMediaItemPropertyArtist: self.currentTrack.artist,
-            MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.currentArtwork),
-            MPMediaItemPropertyPlaybackDuration: NSNumber(integer: 0)
-        ]
-        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = songInfo
     }
     
     private func p_setupInitialUI() -> Void {
@@ -363,17 +273,8 @@ class PageContentViewController: UIViewController {
         }
     }
     
-    private func p_isTodayThursday() -> Bool {
-        let formatter  = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let myCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-        let myComponents = myCalendar.components(.Weekday, fromDate: NSDate()) // NSDate() returns today
-        let weekDay = myComponents.weekday
-        return weekDay == kThursday
-    }
-    
     private func p_setUkrainianLanguageIfThursday() -> Void {
-        let isThursday = p_isTodayThursday()
+        let isThursday = Strings.isTodayThursday()
         p_setDefaultLogo()
         if (isThursday && channel! == .Stream) {
             logoImageView.image = UIImage(named: "logo_ua")
@@ -385,6 +286,7 @@ class PageContentViewController: UIViewController {
     
     func p_timerFired() -> Void {
         p_fetchTrack()
+        PlayerManager.sharedPlayer.updateSongInfo()
     }
         
     func p_setupAutoScrollLabel(label: CBAutoScrollLabel, font: UIFont) -> Void {
