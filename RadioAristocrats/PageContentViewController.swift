@@ -141,6 +141,13 @@ class PageContentViewController: UIViewController {
     // MARK: - Private methods
     
     private func p_fetchTrack() -> Void {
+        
+        if (ReachabilityManager.sharedManager.isInternetConnectionAvailable() == false) {
+            trackTitleLabel.text = LocalizableString.Error.localizedText(LocalizableString.isTodayThursday())
+            artistNameLabel.text = LocalizableString.NoInternetConnection.localizedText(LocalizableString.isTodayThursday())
+            return
+        }
+        
         RadioManager.sharedInstance.fetchTrack(channel!) {
             (result: Result<Track>) -> Void in
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in

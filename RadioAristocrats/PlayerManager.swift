@@ -160,9 +160,16 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
             artworkImage = UIImage(named: "default_artwork")!
         }
         
+        // On Air - no artist and track info
         if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
             track.title = LocalizableString.OnAir.localizedText(LocalizableString.isTodayThursday())
             track.artist = " "
+        }
+        
+        // No Internet connection
+        if (ReachabilityManager.sharedManager.isInternetConnectionAvailable() == false) {
+            track.title = LocalizableString.Error.localizedText(LocalizableString.isTodayThursday())
+            track.artist = LocalizableString.NoInternetConnection.localizedText(LocalizableString.isTodayThursday())
         }
         
         let songInfo: [String: AnyObject] = [
