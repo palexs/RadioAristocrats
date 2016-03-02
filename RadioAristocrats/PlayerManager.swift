@@ -161,7 +161,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
         
         if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
-            track.title = Strings.OnAir.localizedText(Strings.isTodayThursday())
+            track.title = LocalizableString.OnAir.localizedText(LocalizableString.isTodayThursday())
             track.artist = " "
         }
         
@@ -175,7 +175,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
     }
     
     private func p_updateSongInfoWithError(error: RadioManagerError) -> Void {
-        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(Strings.isTodayThursday())
+        let errorTitle = LocalizableString.NoTrackInfoErrorMessage.localizedText(LocalizableString.isTodayThursday())
         let errorArtist = error.toString()
         let errorTrack = Track(title: errorTitle, artist: errorArtist)
         self.p_updateSongInfoWithTrack(errorTrack, artwork:nil)
@@ -200,8 +200,8 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
                 case .Failure(let error):
                     switch error {
                     case .FailedToObtainTrackInfo:
-                        let unknownTitle = Strings.UnknownTrack.localizedText(Strings.isTodayThursday())
-                        let unknownArtist = Strings.UnknownArtist.localizedText(Strings.isTodayThursday())
+                        let unknownTitle = LocalizableString.UnknownTrack.localizedText(LocalizableString.isTodayThursday())
+                        let unknownArtist = LocalizableString.UnknownArtist.localizedText(LocalizableString.isTodayThursday())
                         let unknownTrack = Track(title: unknownTitle, artist: unknownArtist)
                         self.p_updateSongInfoWithTrack(unknownTrack, artwork:nil)
                     default:

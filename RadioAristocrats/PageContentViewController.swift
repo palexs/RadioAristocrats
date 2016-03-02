@@ -129,12 +129,12 @@ class PageContentViewController: UIViewController {
                 case .Failure(let error):
                     switch error {
                     case .FailedToObtainTrackInfo:
-                        let unknownTitle = Strings.UnknownTrack.localizedText(Strings.isTodayThursday())
-                        let unknownArtist = Strings.UnknownArtist.localizedText(Strings.isTodayThursday())
+                        let unknownTitle = LocalizableString.UnknownTrack.localizedText(LocalizableString.isTodayThursday())
+                        let unknownArtist = LocalizableString.UnknownArtist.localizedText(LocalizableString.isTodayThursday())
                         let unknownTrack = Track(title: unknownTitle, artist: unknownArtist)
                         strongSelf.p_updateUIForTrack(unknownTrack)
                     default:
-                        let errorTitle = Strings.NoTrackInfoErrorMessage.localizedText(Strings.isTodayThursday())
+                        let errorTitle = LocalizableString.NoTrackInfoErrorMessage.localizedText(LocalizableString.isTodayThursday())
                         let errorArtist = error.toString()
                         let errorTrack = Track(title: errorTitle, artist: errorArtist)
                         strongSelf.p_updateUIForTrack(errorTrack)
@@ -148,7 +148,7 @@ class PageContentViewController: UIViewController {
     private func p_updateUIForTrack(track: Track) -> Void {
         if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
             trackTitleLabel.textColor = kDefaultOnAirColor
-            trackTitleLabel.text = Strings.OnAir.localizedText(Strings.isTodayThursday())
+            trackTitleLabel.text = LocalizableString.OnAir.localizedText(LocalizableString.isTodayThursday())
             artistNameLabel.text = " "
         } else {
             trackTitleLabel.textColor = UIColor.blackColor()
@@ -172,7 +172,7 @@ class PageContentViewController: UIViewController {
 //            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
 //        }
         
-        p_setMusicQualityWithRespectToReachability()
+//        p_setMusicQualityWithRespectToReachability()
     }
     
     private func p_setupInitialTrackLabels() -> Void {
@@ -182,6 +182,7 @@ class PageContentViewController: UIViewController {
         p_setupAutoScrollLabel(artistNameLabel, font: font)
     }
     
+/*
     private func p_setMusicQualityWithRespectToReachability() -> Void {
         let reachability: Reachability?
         do {
@@ -215,6 +216,7 @@ class PageContentViewController: UIViewController {
             print("*** Not reachable!")
         }
     }
+*/
     
     private func p_getCurrentUIState() -> State {
         let quality = MusicQuality(rawValue: musicQuialitySegmentedControl.selectedSegmentIndex)
@@ -274,14 +276,14 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_setUkrainianLanguageIfThursday() -> Void {
-        let isThursday = Strings.isTodayThursday()
+        let isThursday = LocalizableString.isTodayThursday()
         p_setDefaultLogo()
         if (isThursday && channel! == .Stream) {
             logoImageView.image = UIImage(named: "logo_ua")
         }
         
-        musicQualityLabel.text = Strings.Quality.localizedText(isThursday)
-        musicQuialitySegmentedControl.setTitle(Strings.MusicQualityBest.localizedText(isThursday), forSegmentAtIndex: MusicQuality.Best.rawValue)
+        musicQualityLabel.text = LocalizableString.Quality.localizedText(isThursday)
+        musicQuialitySegmentedControl.setTitle(LocalizableString.MusicQualityBest.localizedText(isThursday), forSegmentAtIndex: MusicQuality.Best.rawValue)
     }
     
     func p_timerFired() -> Void {

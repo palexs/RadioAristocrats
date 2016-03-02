@@ -10,7 +10,7 @@ import Foundation
 
     public let kThursday = 5
 
-public enum Strings: String {
+public enum LocalizableString: String {
     case OnAir
     case UnknownTrack
     case UnknownArtist
