@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import ReachabilitySwift
 import MediaPlayer
 import AutoScrollLabel
+import ReachabilitySwift
 
 struct State {
     var channel: ChannelType
@@ -62,6 +62,24 @@ class PageContentViewController: UIViewController {
         p_setUkrainianLanguageIfThursday()
         p_fetchTrack()
         
+        ReachabilityManager.sharedManager.onReachabilityStatusChange = {(prevStatus: Reachability.NetworkStatus, currStatus: Reachability.NetworkStatus) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
+                guard let strongSelf = self else { return }
+                
+                switch (currStatus) {
+                case .NotReachable:
+                    PlayerManager.sharedPlayer.pause()
+                    strongSelf.p_updatePlayButton()
+                    strongSelf.trackTitleLabel.text = LocalizableString.Error.localizedText(LocalizableString.isTodayThursday())
+                    strongSelf.artistNameLabel.text = LocalizableString.NoInternetConnection.localizedText(LocalizableString.isTodayThursday())
+                case .ReachableViaWWAN, .ReachableViaWiFi:
+                    if (prevStatus == .NotReachable) { // Recover from Internet connection loss
+                        PlayerManager.sharedPlayer.updatePlayerForState(strongSelf.p_getCurrentUIState())
+                    }
+                }
+            })
+        }
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: kViewControllerRemotePlayPauseCommandNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_notificationHandler:", name: UIApplicationSignificantTimeChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "p_updatePlayButtonNotificationHandler:", name: kViewControllerUpdatePlayButtonNotification, object: nil)
@@ -84,6 +102,11 @@ class PageContentViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func playButtonTouched(sender: UIButton?) {
+        
+        if (ReachabilityManager.sharedManager.isInternetConnectionAvailable() == false) {
+            return
+        }
+        
         if let delegate = self.delegate {
             let state = p_getCurrentUIState()
             delegate.pageContentViewController(self, didRecievePlayButtonTapWithState: state)
@@ -158,21 +181,19 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_setupInitialUI() -> Void {
-
         p_setupInitialTrackLabels()
         p_updatePlayButton()
         p_setDefaultLogo()
         
+        // Hide music quality switch for Jazz channel
         let shouldQualityControllBeHidden: Bool = channel! == .Jazz
         musicQuialitySegmentedControl.hidden = shouldQualityControllBeHidden
         musicQualityLabel.hidden = shouldQualityControllBeHidden
         
-//        if (_channel! == .Jazz) {
-            // Jazz channel has only Best quality
-//            musicQuialitySegmentedControl.removeSegmentAtIndex(MusicQuality.Edge.rawValue, animated: false)
-//        }
-        
-//        p_setMusicQualityWithRespectToReachability()
+        // Music quality switch value should coincide with selected player quality
+        if (PlayerManager.sharedPlayer.channel == channel!) {
+            musicQuialitySegmentedControl.selectedSegmentIndex = PlayerManager.sharedPlayer.quality.rawValue
+        }
     }
     
     private func p_setupInitialTrackLabels() -> Void {
@@ -181,42 +202,6 @@ class PageContentViewController: UIViewController {
         font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         p_setupAutoScrollLabel(artistNameLabel, font: font)
     }
-    
-/*
-    private func p_setMusicQualityWithRespectToReachability() -> Void {
-        let reachability: Reachability?
-        do {
-            reachability = try Reachability.reachabilityForInternetConnection()
-        } catch _ {
-            print("*** Failed to obtain reachability value!")
-            reachability = nil
-        }
-        
-        if reachability!.isReachable() {
-            if reachability!.isReachableViaWiFi() {
-                if (PlayerManager.sharedPlayer.quality != .Best) {
-                    musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Best.rawValue
-                    if let delegate = self.delegate {
-                        let state = State(channel: channel!, quality: .Best) // p_getCurrentUIState()
-                        delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
-                    }
-                    print("Reachable via WiFi")
-                }
-            } else {
-                if (PlayerManager.sharedPlayer.quality != .Edge) {
-                    musicQuialitySegmentedControl.selectedSegmentIndex = MusicQuality.Edge.rawValue
-                    if let delegate = self.delegate {
-                        let state = State(channel: channel!, quality: .Edge) // p_getCurrentUIState()
-                        delegate.pageContentViewController(self, didRecieveMusicQualitySwitchWithState: state)
-                    }
-                    print("Reachable via Cellular")
-                }
-            }
-        } else {
-            print("*** Not reachable!")
-        }
-    }
-*/
     
     private func p_getCurrentUIState() -> State {
         let quality = MusicQuality(rawValue: musicQuialitySegmentedControl.selectedSegmentIndex)

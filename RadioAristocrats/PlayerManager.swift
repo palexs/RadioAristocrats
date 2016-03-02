@@ -27,7 +27,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         let url = NSURL(string: RadioManager.endpointUrlString(_channel, quality: _quality))
         let playerItem = AVPlayerItem(URL: url!)
         _player = AVPlayer(playerItem: playerItem)
-        super.init()
+        super.init() // super.init() must be called AFTER you initialize all your instance variables
 //        _player.currentItem!.addObserver(self, forKeyPath: "status", options: [], context: &kKVOContext)
         
         // Setup background playback

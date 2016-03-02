@@ -18,6 +18,7 @@ public enum LocalizableString: String {
     case MusicQualityBest
     case Quality
     case Error
+    case NoInternetConnection
     
     func localizedText(let isThursday: Bool) -> String {
         if (isThursday) { // Ukrainian
@@ -36,6 +37,8 @@ public enum LocalizableString: String {
                 return "Якість"
             case .Error:
                 return "Помилка"
+            case .NoInternetConnection:
+                return "Інтернет звя'зок відсутній!"
             }
         } else { // Russian
             switch self {
@@ -53,6 +56,8 @@ public enum LocalizableString: String {
                 return "Качество"
             case .Error:
                 return "Ошибка"
+            case .NoInternetConnection:
+                return "Интернет связь отсутствует!"
             }
         }
     }
