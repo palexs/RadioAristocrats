@@ -42,7 +42,7 @@
 		FD1BABAD1AB3312C00FAA022 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FD22E1361C86EF59005074E4 /* LocalizableString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizableString.swift; sourceTree = "<group>"; };
 		FD22E1381C870E36005074E4 /* ReachabilityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
-		FD74E2D71AA87A3400EFF16B /* RadioAristocrats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RadioAristocrats.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD74E2D71AA87A3400EFF16B /* Аристократы.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Аристократы.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD74E2DB1AA87A3400EFF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD74E2DC1AA87A3400EFF16B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD74E2DE1AA87A3400EFF16B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 		FD74E2D81AA87A3400EFF16B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FD74E2D71AA87A3400EFF16B /* RadioAristocrats.app */,
+				FD74E2D71AA87A3400EFF16B /* Аристократы.app */,
 				FD74E2EC1AA87A3400EFF16B /* RadioAristocratsTests.xctest */,
 			);
 			name = Products;
@@ -182,7 +182,7 @@
 			);
 			name = RadioAristocrats;
 			productName = RadioAristocrats;
-			productReference = FD74E2D71AA87A3400EFF16B /* RadioAristocrats.app */;
+			productReference = FD74E2D71AA87A3400EFF16B /* Аристократы.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FD74E2EB1AA87A3400EFF16B /* RadioAristocratsTests */ = {
@@ -479,7 +479,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Аристократы";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -496,7 +496,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Аристократы";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
