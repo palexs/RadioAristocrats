@@ -161,7 +161,7 @@ class PlayerManager: NSObject, PageContentViewControllerDelegate {
         }
         
         // On Air - no artist and track info
-        if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
+        if (track.title == kTrackEmptyString || track.artist == kTrackEmptyString) {
             track.title = LocalizableString.OnAir.localizedText(LocalizableString.isTodayThursday())
             track.artist = " "
         }

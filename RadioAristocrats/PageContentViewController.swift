@@ -176,7 +176,7 @@ class PageContentViewController: UIViewController {
     }
     
     private func p_updateUIForTrack(track: Track) -> Void {
-        if (track.title == kTrackEmptyString && track.artist == kTrackEmptyString) {
+        if (track.title == kTrackEmptyString || track.artist == kTrackEmptyString) {
             trackTitleLabel.textColor = kDefaultOnAirColor
             trackTitleLabel.text = LocalizableString.OnAir.localizedText(LocalizableString.isTodayThursday())
             artistNameLabel.text = " "
