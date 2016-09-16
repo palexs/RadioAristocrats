@@ -71,11 +71,11 @@ class RadioManager {
             case .XML(let channel):
                 switch channel {
                 case .Stream:
-                    return "\(kXMLBaseUrl)/service/nowplaying-aristocrats5.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying-aristocrats7.xml"
                 case .AMusic:
-                    return "\(kXMLBaseUrl)/service/nowplaying-amusic5.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying-amusic7.xml"
                 case .Jazz:
-                    return "\(kXMLBaseUrl)/service/nowplaying-ajazz5.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying-ajazz7.xml"
                 }
 
             case .Music(let channel, let quality):
