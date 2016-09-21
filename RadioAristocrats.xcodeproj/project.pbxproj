@@ -17,22 +17,11 @@
 		FD74E2E21AA87A3400EFF16B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E01AA87A3400EFF16B /* Main.storyboard */; };
 		FD74E2E41AA87A3400EFF16B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E31AA87A3400EFF16B /* Images.xcassets */; };
 		FD74E2E71AA87A3400EFF16B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD74E2E51AA87A3400EFF16B /* LaunchScreen.xib */; };
-		FD74E2F31AA87A3400EFF16B /* RadioAristocratsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2F21AA87A3400EFF16B /* RadioAristocratsTests.swift */; };
 		FD74E2FF1AA8802800EFF16B /* PageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */; };
 		FD74E3011AA896DB00EFF16B /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3001AA896DB00EFF16B /* Track.swift */; };
 		FD74E3031AA898E800EFF16B /* RadioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3021AA898E800EFF16B /* RadioManager.swift */; };
 		FD74E3051AA9A5DF00EFF16B /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74E3041AA9A5DF00EFF16B /* XMLParser.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		FD74E2ED1AA87A3400EFF16B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FD74E2CF1AA87A3400EFF16B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FD74E2D61AA87A3400EFF16B;
-			remoteInfo = RadioAristocrats;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6CC34AB6C630DAB7DEEC0B45 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -49,7 +38,6 @@
 		FD74E2E11AA87A3400EFF16B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FD74E2E31AA87A3400EFF16B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FD74E2E61AA87A3400EFF16B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		FD74E2EC1AA87A3400EFF16B /* RadioAristocratsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadioAristocratsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD74E2F11AA87A3400EFF16B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD74E2F21AA87A3400EFF16B /* RadioAristocratsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioAristocratsTests.swift; sourceTree = "<group>"; };
 		FD74E2FE1AA8802800EFF16B /* PageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageContentViewController.swift; sourceTree = "<group>"; };
@@ -65,13 +53,6 @@
 			files = (
 				FD1BABAE1AB3312C00FAA022 /* AVFoundation.framework in Frameworks */,
 				8AB7D3A8BD2CB7EA45B35A85 /* Pods.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FD74E2E91AA87A3400EFF16B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				FD74E2D71AA87A3400EFF16B /* Аристократы.app */,
-				FD74E2EC1AA87A3400EFF16B /* RadioAristocratsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -185,24 +165,6 @@
 			productReference = FD74E2D71AA87A3400EFF16B /* Аристократы.app */;
 			productType = "com.apple.product-type.application";
 		};
-		FD74E2EB1AA87A3400EFF16B /* RadioAristocratsTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FD74E2F91AA87A3400EFF16B /* Build configuration list for PBXNativeTarget "RadioAristocratsTests" */;
-			buildPhases = (
-				FD74E2E81AA87A3400EFF16B /* Sources */,
-				FD74E2E91AA87A3400EFF16B /* Frameworks */,
-				FD74E2EA1AA87A3400EFF16B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FD74E2EE1AA87A3400EFF16B /* PBXTargetDependency */,
-			);
-			name = RadioAristocratsTests;
-			productName = RadioAristocratsTests;
-			productReference = FD74E2EC1AA87A3400EFF16B /* RadioAristocratsTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -217,15 +179,12 @@
 					FD74E2D61AA87A3400EFF16B = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 44U47KTSE6;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 						};
-					};
-					FD74E2EB1AA87A3400EFF16B = {
-						CreatedOnToolsVersion = 6.3;
-						TestTargetID = FD74E2D61AA87A3400EFF16B;
 					};
 				};
 			};
@@ -245,7 +204,6 @@
 			projectRoot = "";
 			targets = (
 				FD74E2D61AA87A3400EFF16B /* RadioAristocrats */,
-				FD74E2EB1AA87A3400EFF16B /* RadioAristocratsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,13 +216,6 @@
 				FD74E2E21AA87A3400EFF16B /* Main.storyboard in Resources */,
 				FD74E2E71AA87A3400EFF16B /* LaunchScreen.xib in Resources */,
 				FD74E2E41AA87A3400EFF16B /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FD74E2EA1AA87A3400EFF16B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,23 +299,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FD74E2E81AA87A3400EFF16B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FD74E2F31AA87A3400EFF16B /* RadioAristocratsTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		FD74E2EE1AA87A3400EFF16B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FD74E2D61AA87A3400EFF16B /* RadioAristocrats */;
-			targetProxy = FD74E2ED1AA87A3400EFF16B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		FD74E2E01AA87A3400EFF16B /* Main.storyboard */ = {
@@ -475,12 +410,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 44U47KTSE6;
 				INFOPLIST_FILE = RadioAristocrats/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
 				PRODUCT_NAME = "Аристократы";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -492,49 +429,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 44U47KTSE6;
 				INFOPLIST_FILE = RadioAristocrats/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.44U47KTSE6.RadioAristocrats;
 				PRODUCT_NAME = "Аристократы";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		FD74E2FA1AA87A3400EFF16B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RadioAristocratsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "fm.aristocrats.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RadioAristocrats.app/RadioAristocrats";
-			};
-			name = Debug;
-		};
-		FD74E2FB1AA87A3400EFF16B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RadioAristocratsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "fm.aristocrats.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RadioAristocrats.app/RadioAristocrats";
 			};
 			name = Release;
 		};
@@ -555,15 +458,6 @@
 			buildConfigurations = (
 				FD74E2F71AA87A3400EFF16B /* Debug */,
 				FD74E2F81AA87A3400EFF16B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FD74E2F91AA87A3400EFF16B /* Build configuration list for PBXNativeTarget "RadioAristocratsTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FD74E2FA1AA87A3400EFF16B /* Debug */,
-				FD74E2FB1AA87A3400EFF16B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
