@@ -56,7 +56,7 @@ enum Result<T> {
 class RadioManager {
     
     private static let kXMLBaseUrl = "http://aristocrats.fm"
-    private static let kMusicBaseUrl = "http://144.76.79.38:8000"
+    private static let kMusicBaseUrl = "http://air.aristocrats.fm:8000"
     private static let kArtworksBaseUrl = "http://ws.audioscrobbler.com/2.0"
     
     private static let kAPIKey = "690e1ed3bc00bc91804cd8f7fe5ed6d4"
@@ -71,11 +71,11 @@ class RadioManager {
             case .XML(let channel):
                 switch channel {
                 case .Stream:
-                    return "\(kXMLBaseUrl)/service/nowplaying-aristocrats8.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying/"
                 case .AMusic:
-                    return "\(kXMLBaseUrl)/service/nowplaying-amusic8.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying-amusic/"
                 case .Jazz:
-                    return "\(kXMLBaseUrl)/service/nowplaying-ajazz8.xml"
+                    return "\(kXMLBaseUrl)/service/nowplaying-ajazz/"
                 }
 
             case .Music(let channel, let quality):
